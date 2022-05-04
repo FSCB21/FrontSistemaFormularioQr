@@ -1,0 +1,74 @@
+.PhoneInputInput{
+    outline: none;
+    border: 0;
+    background: transparent;
+    font-family: Poppins;
+}
+
+.BorderFormNewUser{
+    border-radius: 30px !important;
+}
+
+.p-inputtext{
+    border-radius: 30px !important;
+}
+
+.bodyForm{
+    background-image: url("../../assets/images/FondoForm.gif");
+}
+
+.cardForm{
+    background: rgba(255, 255, 255, 0.678);
+}
+
+.tracking-in-contract{
+    -webkit-animation: tracking-in-contract 2s cubic-bezier(0.215, 0.610, 0.355, 1.000) both infinite;
+	        animation: tracking-in-contract 2s cubic-bezier(0.215, 0.610, 0.355, 1.000) both infinite;
+}
+
+@media (min-width: 1700px) {
+    .bodyForm {
+        height: 100vh;
+    }
+  }
+
+  @-webkit-keyframes tracking-in-contract {
+    0% {
+        letter-spacing: 1em;
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.6;
+      }
+      50% {
+        letter-spacing: normal;
+        opacity: 1;
+      }
+      70% {
+          opacity: 0.6;
+      }
+      100% {
+          letter-spacing: 1em;
+          opacity: 0;
+      }
+  }
+  @keyframes tracking-in-contract {
+    0% {
+      letter-spacing: 1em;
+      opacity: 0;
+    }
+    20% {
+      opacity: 0.6;
+    }
+    50% {
+      letter-spacing: normal;
+      opacity: 1;
+    }
+    70% {
+        opacity: 0.6;
+    }
+    100% {
+        letter-spacing: 1em;
+        opacity: 0;
+    }
+  }
