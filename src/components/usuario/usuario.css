@@ -1,0 +1,20 @@
+.code-style{
+    display: block;
+    white-space: nowrap;
+    text-align: center;
+    padding: 4.5px;
+    font-weight: bolder;
+    border-radius: 30px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05), 0 3px 6px rgba(0, 0, 0, 0.10)
+}
+
+.code-canjeado{
+    background-color: #92e981ad;
+    color: #186b09c0;
+    
+}
+
+.code-sin-canjear{
+    background-color: #e26d6db2;
+    color: #631313bb;
+}

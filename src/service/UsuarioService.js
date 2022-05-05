@@ -12,6 +12,18 @@ class UsuarioService  {
         return axios.get(`${API}/filtered-users?atribute=${atribute}&value=${value}&method=${method}&page=${page}&size=${size}`)
     }
 
+    getAllByRangeDate(fechaInicio, fechaFin, campo, page, size){
+        return axios.get(`${API}/filter-by-date-range?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&campo=${campo}&page=${page}&size=${size}`)
+    }
+
+    update(data){
+        return axios.put(`${API}/update?id_usuario=${data.id_usuario}`,data)
+    }
+
+    getByStateCode(state, page, size){
+        return axios.get(`${API}/getby-state-code?estado_code=${state}`)
+    }
+
 }
 
 export default UsuarioService

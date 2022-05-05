@@ -8,6 +8,10 @@ class LugarRegistroService  {
         return axios.get(`${API}/state-true`)
     }
 
+    getAll(){
+        return axios.get(API)
+    }
+
 }
 
 export default LugarRegistroService

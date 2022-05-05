@@ -5,20 +5,16 @@ import { DataTable } from 'primereact/datatable'
 import { Paginator } from 'primereact/paginator'
 import { Ripple } from 'primereact/ripple'
 import { Dropdown } from 'primereact/dropdown'
-import { InputText } from 'primereact/inputtext'
-import { OverlayPanel } from 'primereact/overlaypanel'
-import { SelectButton } from 'primereact/selectbutton'
-import React, { useEffect, useState, useRef } from 'react'
-import UsuarioService from '../service/UsuarioService'
-import LoadPage from '../components/LoadPage'
-import { Button } from 'primereact/button'
-import { Calendar } from 'primereact/calendar'
-
-import '../components/usuario/usuario.css'
-import LugarRegistroService from '../service/LugarRegistroService'
 import { Toast } from 'primereact/toast'
+import { InputText } from 'primereact/inputtext'
+import React, { useEffect, useState, useRef } from 'react'
+import UsuarioService from '../../service/UsuarioService'
+import LoadPage from '../LoadPage'
 
-const Usuarios = () => {
+import './usuario.css'
+import LugarRegistroService from '../../service/LugarRegistroService'
+
+const DefaultTable = (params) => {
 
     const [loading, setLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
@@ -29,35 +25,16 @@ const Usuarios = () => {
     const [loadData, setLoadData] = useState(0)
     const [totalRecords, setTotalRecords] = useState(0)
 
-    let today = new Date()
     const toast = useRef(null);
-
-    const op = useRef(null);
-    const opCalendar = useRef(null);
 
     useEffect(() => {
         const usuarioService = new UsuarioService()
         setLoading(true)
-
-        if(dataFilteredCalendar){
-          usuarioService.getAllByRangeDate(dataFilteredCalendar.fechaInicioValue,dataFilteredCalendar.fechaFinValue,dataFilteredCalendar.calendarOption,currentPage-1,customRows).then(res=>{
-            setUsuarios(res.data.rows)
-            setTotalRecords(res.data.totalItems)
-            setLoading(false)
-          })
-        }else if(dataFiltered){
-          usuarioService.getAllFiltered(dataFiltered.fieldOption,dataFiltered.valueOption,dataFiltered.filterOption,currentPage-1,customRows).then(res => {
-            setUsuarios(res.data.rows)
-            setTotalRecords(res.data.totalItems)
-            setLoading(false)
-          });
-        }else{
-          usuarioService.getAll(currentPage-1,customRows).then(res => {
+        usuarioService.getByStateCode(params.stateCode,currentPage-1,customRows).then(res => {
             setUsuarios(res.data.rows)
             setTotalRecords(res.data.totalItems)
             setLoading(false)
         });
-        }
 
       return () => {
       }
@@ -105,13 +82,6 @@ const Usuarios = () => {
       layout: 'PrevPageLink PageLinks NextPageLink RowsPerPageDropdown CurrentPageReport',
       'PrevPageLink': (options) => {
           return (<>
-              {dataFiltered &&
-                <Button icon="pi pi-filter-slash" onClick={deleteFilter} style={{border:"none"}} className='p-button-outlined p-button-rounded inline-flex my-3 mx-3'/>
-              }
-              {!dataFiltered &&
-              <Button icon="pi pi-filter" onClick={(e) => op.current.toggle(e)} style={{border:"none"}} className='p-button-outlined p-button-rounded p-button-secondary inline-flex my-3 mx-3'/>
-            }
-            
               <button type="button" className={options.className} onClick={options.onClick} disabled={options.disabled}>
                   <span className="p-3"><i className='pi pi-angle-left'/></span>
                   <Ripple />
@@ -165,13 +135,6 @@ const Usuarios = () => {
 
         return <>
           <Dropdown value={options.value} options={dropdownOptions} onChange={options.onChange} className="mr-2" />
-
-          {dataFilteredCalendar &&
-            <Button icon="pi pi-calendar" onClick={deleteFilter} style={{border:"none"}} className='p-button-outlined p-button-rounded inline-flex my-3 mx-3'/>
-          }
-          {!dataFilteredCalendar &&
-            <Button icon="pi pi-calendar" onClick={(e) => opCalendar.current.toggle(e)} style={{border:"none"}} className='p-button-outlined p-button-rounded p-button-secondary inline-flex my-3 mx-3'/>
-          }
         </>
     }
   };
@@ -220,79 +183,7 @@ const Usuarios = () => {
       })
     }
   }
-
-  //Filter
-
-  const [ filterOption, setFilterOption ] = useState("eq")
-  const [ fieldOption, setFieldOption ] = useState(null)
-  const [ valueOption, setValueOption ] = useState('')
-
-  const deleteFilterData = () =>{
-    setFilterOption("eq")
-    setFieldOption(null)
-    setValueOption('')
-    setCalendarOption(null)
-    setFechaInicioValue(null)
-    setFechaFinValue(null)
-  }
-
-  const deleteFilter = () =>{
-    setDataFiltered(null)
-    setDataFilteredCalendar(null)
-    setLoadData(loadData+1)
-  }
-
-  const filterOptions = [
-    {name:'Igual', code:"eq"},
-    {name:'Diferente', code:"ne"},
-    {name:'Contiene', code:"substring"}
-  ]
-
-  const fieldOptions = [
-    {name:"Nombres", value:'nombres'},
-    {name:'Apellidos', value:'apellidos'}, 
-    {name:'Correo',value:'correo_electronico'}, 
-    {name:'Fecha Nacimiento',value:'fecha_nacimiento'}, 
-    {name:'Telefono',value:'telefono_contacto'}, 
-    {name:'Identificación',value:'numero_doc'}, 
-    {name:'Lugar Registro',value:'lugar_registro_fk'}  
-  ]
-  const [dataFiltered, setDataFiltered] = useState(null)
-
-  const searchFiltered = () =>{
-    setDataFiltered({filterOption,fieldOption,valueOption})
-    setCurrentPage(1)
-    setLoadData(loadData+1)
-    op.current.hide()
-  }
-
-  //Calendar Options
-  const calendarOptions = [
-    {name:'Fecha Nacimiento',value:'fecha_nacimiento'}, 
-    {name:'Fecha Registro',value:'createdAt'}, 
-  ]
-
-  const [ dataFilteredCalendar, setDataFilteredCalendar ] = useState(null)
-
-  const [ calendarOption, setCalendarOption ] = useState(null)
-  const [ fechaInicioValue, setFechaInicioValue ] = useState(null)
-  const [ fechaFinValue, setFechaFinValue ] = useState(null)
-
-  const CalendarFiltered = () =>{
-    setDataFilteredCalendar({calendarOption,fechaInicioValue,fechaFinValue})
-    setCurrentPage(1)
-    setLoadData(loadData+1)
-    opCalendar.current.hide()
-  }
-
-  const monthNavigatorTemplate=(e)=> {
-    return <Dropdown value={e.value} options={e.options} onChange={(event) => e.onChange(event.originalEvent, event.value)} style={{ lineHeight: 1 }} />;
-  }
-
-  const yearNavigatorTemplate=(e)=> {
-    return <Dropdown value={e.value} options={e.options} onChange={(event) => e.onChange(event.originalEvent, event.value)} className="p-ml-2" style={{ lineHeight: 1 }} />;
-  }
-
+  
   return (<>
       {loading && 
           <div className='relative h-screen w-full justify-content-center align-items-center flex'>
@@ -317,21 +208,7 @@ const Usuarios = () => {
           </DataTable>
         </Card>
       }
-      <OverlayPanel ref={op} onHide={deleteFilterData} dismissable style={{ width: '305px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)' }} breakpoints={{'640px': '90vw'}}>
-        <SelectButton optionLabel="name" optionValue="code" value={filterOption} options={filterOptions} onChange={(e) => setFilterOption(e.value)}/>
-        <Dropdown value={fieldOption} className='w-full mt-4 BorderFormNewUser' options={fieldOptions} onChange={e=>setFieldOption(e.value)} optionLabel="name" placeholder="Seleccione el campo" />
-        <InputText value={valueOption} placeholder='Escriba el valor' className='w-full mt-4' onChange={(e) => setValueOption(e.target.value)} />
-        <Button label='Filtrar' onClick={searchFiltered} className='w-full mt-4 BorderFormNewUser' disabled={(filterOption&&fieldOption&&valueOption)?false:true}/>
-      </OverlayPanel>
-      <OverlayPanel ref={opCalendar} onHide={deleteFilterData} dismissable style={{ width: '305px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)' }} breakpoints={{'640px': '90vw'}}>
-        <Dropdown value={calendarOption} className='w-full BorderFormNewUser' options={calendarOptions} onChange={e=>setCalendarOption(e.value)} optionLabel="name" placeholder="Seleccione el campo" />
-        <Calendar placeholder='Fecha Inicio' className='w-full mt-4' dateFormat="dd/mm/yy" name="fecha_nacimiento" yearRange={`${today.getFullYear()-200}:${today.getFullYear()}`} id="fecha_nacimiento" value={fechaInicioValue} onChange={e=>setFechaInicioValue(e.value)}  monthNavigator yearNavigator style={{ borderRadius: "100%" }}
-          monthNavigatorTemplate={monthNavigatorTemplate} yearNavigatorTemplate={yearNavigatorTemplate} />
-        <Calendar placeholder='Fecha Fin' className='w-full mt-4' dateFormat="dd/mm/yy" name="fecha_nacimiento" yearRange={`${today.getFullYear()-200}:${today.getFullYear()}`} id="fecha_nacimiento" value={fechaFinValue} onChange={e=>setFechaFinValue(e.value)}  monthNavigator yearNavigator style={{ borderRadius: "100%" }}
-          monthNavigatorTemplate={monthNavigatorTemplate} yearNavigatorTemplate={yearNavigatorTemplate} />
-        <Button label='Filtrar' onClick={CalendarFiltered} className='w-full mt-4 BorderFormNewUser' disabled={(calendarOption&&fechaInicioValue&&fechaFinValue)?false:true}/>
-      </OverlayPanel>
   </>)
 }
 
-export default Usuarios
+export default DefaultTable

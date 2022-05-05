@@ -25,6 +25,10 @@ import FormNewUser from './pages/FormNewUser';
 import LoginPage from './pages/LoginPage';
 import Usuarios from './pages/Usuarios';
 
+import menu from './MenuConten'
+import DefaultTable from './components/usuario/DeFaultTable.jsx';
+import LugarRegistro from './pages/LugarRegistro';
+
 const App = () => {
     const [layoutMode, setLayoutMode] = useState('static');
     const [layoutColorMode, setLayoutColorMode] = useState('light')
@@ -135,19 +139,6 @@ const App = () => {
         return window.innerWidth >= 992;
     }
 
-    const menu = [
-        {
-            items: [{
-                label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dash/plantilla'
-            }]
-        },
-        {
-            items: [{
-                label: 'Usuarios', icon: 'pi pi-fw pi-users', to: '/dash/usuarios'
-            }]
-        },
-    ]
-
     const addClass = (element, className) => {
         if (element.classList)
             element.classList.add(className);
@@ -192,6 +183,9 @@ const App = () => {
                     <div className="layout-main">
                         <Route path="/dash/plantilla/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
                         <Route path="/dash/usuarios/" exact ><Usuarios/></Route>
+                        <Route path="/dash/usuarios-canjeado/" exact ><DefaultTable stateCode={1}/></Route>
+                        <Route path="/dash/usuarios-sin-canjear/" exact ><DefaultTable stateCode={0}/></Route>
+                        <Route path="/dash/lugar-registro/" exact ><LugarRegistro/></Route>
                     </div>
 
                     <AppFooter layoutColorMode={layoutColorMode} />
