@@ -79,7 +79,7 @@ const DefaultTable = (params) => {
     }
 
     const template1 = {
-      layout: 'PrevPageLink PageLinks NextPageLink RowsPerPageDropdown CurrentPageReport',
+      layout: 'PrevPageLink PageLinks NextPageLink CurrentPageReport RowsPerPageDropdown',
       'PrevPageLink': (options) => {
           return (<>
               <button type="button" className={options.className} onClick={options.onClick} disabled={options.disabled}>
@@ -90,11 +90,12 @@ const DefaultTable = (params) => {
       },
       'NextPageLink': (options) => {
           return (
+            <>
               <button type="button" className={options.className} onClick={options.onClick} disabled={options.disabled}>
                   <span className="p-3"><i className='pi pi-angle-right'/></span>
                   <Ripple />
               </button>
-          )
+          </>)
       },
       'PageLinks': (options) => {
           if ((options.view.startPage === options.page && options.view.startPage !== 0) || (options.view.endPage === options.page && options.page + 1 !== options.totalPages)) {
@@ -104,6 +105,7 @@ const DefaultTable = (params) => {
           }
 
           return (
+            
               <button type="button" className={'hidden sm:inline-flex '+options.className} onClick={options.onClick}>
                   {options.page + 1}
                   <Ripple />
@@ -193,7 +195,7 @@ const DefaultTable = (params) => {
       <Toast ref={toast} />
       {!loading &&
         <Card>
-          <Paginator className='w-11 inline-flex' template={template1} first={customFirst} rows={customRows} totalRecords={totalRecords} onPageChange={onCustomPageChange}/>
+          <Paginator className='w-full inline-flex justify-content-between' template={template1} first={customFirst} rows={customRows} totalRecords={totalRecords} onPageChange={onCustomPageChange}/>
           <DataTable value={usuarios} responsiveLayout="scroll" size="small" emptyMessage='Ups... No se encontro un registro para mostrar 😧'
             editMode="row" dataKey="id" onRowEditComplete={onRowEditComplete}>
               <Column sortable field="nombres" editor={(options) => textEditor(options)} header="Nombres"/>

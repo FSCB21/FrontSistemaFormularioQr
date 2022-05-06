@@ -28,6 +28,7 @@ import Usuarios from './pages/Usuarios';
 import menu from './MenuConten'
 import DefaultTable from './components/usuario/DeFaultTable.jsx';
 import LugarRegistro from './pages/LugarRegistro';
+import ReporteUsuarios from './pages/ReporteUsuarios';
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState('static');
@@ -186,6 +187,7 @@ const App = () => {
                         <Route path="/dash/usuarios-canjeado/" exact ><DefaultTable stateCode={1}/></Route>
                         <Route path="/dash/usuarios-sin-canjear/" exact ><DefaultTable stateCode={0}/></Route>
                         <Route path="/dash/lugar-registro/" exact ><LugarRegistro/></Route>
+                        <Route path="/dash/reporte" exact ><ReporteUsuarios/></Route>
                     </div>
 
                     <AppFooter layoutColorMode={layoutColorMode} />
