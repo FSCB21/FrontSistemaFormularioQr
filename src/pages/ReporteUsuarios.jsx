@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import { Card } from 'primereact/card'
 import { MultiSelect } from 'primereact/multiselect';
 import { Button } from 'primereact/button';
+import { InputSwitch } from 'primereact/inputswitch';
 import GenReporteService from '../service/GenReporteService';
+import FilterComponent from '../components/reporte/FilterComponent';
 const ReporteUsuarios = () => {
 
     const [selectedOptions, setSelectedOptions] = useState([]);
@@ -63,14 +65,23 @@ const ReporteUsuarios = () => {
         });
     }
 
+    const [valueFiltrar, setValueFiltrar] = useState(false)
+    const [condiciones, setCondiciones] = useState([])
+
   return (
     <Card>
-        <div>Seleccione los campos a exportar:</div>
+        <h5>Seleccione los campos a exportar:</h5>
         <div className='mt-4 w-6'>
-            <MultiSelect value={selectedOptions} className='w-full' filter options={options} onChange={(e) => setSelectedOptions(e.value)} optionLabel="name" placeholder="Seleccione algun campo" display="chip" />
+            <MultiSelect value={selectedOptions} className='w-full BorderFormNewUser' filter options={options} onChange={(e) => setSelectedOptions(e.value)} optionLabel="name" placeholder="Seleccione algun campo" display="chip" />
         </div>
-        
-        <Button disabled={selectedOptions[0]?false:true} onClick={submit} icon='pi pi-download' label='Generar Reporte' className='mt-4'/>
+        <div className='mt-4 w-6'>
+            <h6>Filtrar Información:</h6>
+            <InputSwitch checked={valueFiltrar} onChange={(e) => setValueFiltrar(e.value)} />
+        </div>
+
+        {valueFiltrar && <FilterComponent setCondiciones={setCondiciones} condiciones={condiciones}/>}
+
+        <Button disabled={selectedOptions[0]?false:true} onClick={submit} icon='pi pi-download' label='Generar Reporte' className='mt-4 BorderFormNewUser'/>
     </Card>
   )
 }
