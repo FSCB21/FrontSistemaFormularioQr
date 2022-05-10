@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { Card } from 'primereact/card'
 import { MultiSelect } from 'primereact/multiselect';
 import { Button } from 'primereact/button';
 import { InputSwitch } from 'primereact/inputswitch';
 import GenReporteService from '../service/GenReporteService';
 import FilterComponent from '../components/reporte/FilterComponent';
+import { Toast } from 'primereact/toast';
 const ReporteUsuarios = () => {
 
     const [selectedOptions, setSelectedOptions] = useState([]);
 
+    const toast = useRef(null);
     const options = [
         { name: 'Nombres', campo: 'nombres' },
         { name: 'Apellidos', campo: 'apellidos' },
@@ -34,11 +36,33 @@ const ReporteUsuarios = () => {
             }
         });
 
-        console.log(campos)
-        console.log(foraneas)
-        genReporteService.genReporte({campos,foraneas, condiciones:[], condiciones_num:[]}).then(res=>{
-            exportExcel(res.data)
+        //Condiciones
+        let condiciones = []
+        let condiciones_num = []
+
+        condicionesFilter.forEach( el => {
+            el = {...el}
+            if(el.tipo===1||el.tipo===4)
+                condiciones.push(el)
+            else if(el.tipo===3){
+                condiciones_num.push(el)
+                foraneas.push({campo:'estado_codigo',value:el.value,tipo:3})
+            }else{
+                el.valor = el.valor.id_lugar_registro
+                condiciones_num.push(el)
+            }
         })
+/* 
+        genReporteService.genReporte({campos,foraneas, condiciones, condiciones_num}).then(res=>{
+            exportExcel(res.data)
+            toast.current.show({severity:'success', summary: 'FXA Te Informa', detail: 'Reporte Generado Con Exíto', life: 3000});
+        }) */
+    }
+
+    const limpiarFormulario = () =>{
+        setCondicionesFilter([])
+        setSelectedOptions([])
+        setValueFiltrar(false)
     }
 
     //Generate excel
@@ -47,7 +71,7 @@ const ReporteUsuarios = () => {
             const worksheet = xlsx.utils.json_to_sheet(products);
             const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
             const excelBuffer = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-            saveAsExcelFile(excelBuffer, 'products');
+            saveAsExcelFile(excelBuffer, 'Reporte');
         });
     }
 
@@ -60,16 +84,17 @@ const ReporteUsuarios = () => {
                     type: EXCEL_TYPE
                 });
 
-                module.default.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+                module.default.saveAs(data, fileName + '_FXA_' + new Date().getDate() + "-" + (new Date().getMonth()+1) + "-" + new Date().getFullYear() + EXCEL_EXTENSION);
             }
         });
     }
 
     const [valueFiltrar, setValueFiltrar] = useState(false)
-    const [condiciones, setCondiciones] = useState([])
+    const [condicionesFilter, setCondicionesFilter] = useState([])
 
   return (
     <Card>
+        <Toast ref={toast} />
         <h5>Seleccione los campos a exportar:</h5>
         <div className='mt-4 w-6'>
             <MultiSelect value={selectedOptions} className='w-full BorderFormNewUser' filter options={options} onChange={(e) => setSelectedOptions(e.value)} optionLabel="name" placeholder="Seleccione algun campo" display="chip" />
@@ -79,8 +104,9 @@ const ReporteUsuarios = () => {
             <InputSwitch checked={valueFiltrar} onChange={(e) => setValueFiltrar(e.value)} />
         </div>
 
-        {valueFiltrar && <FilterComponent setCondiciones={setCondiciones} condiciones={condiciones}/>}
+        {valueFiltrar && <FilterComponent toast={toast} setCondicionesFilter={setCondicionesFilter} condicionesFilter={condicionesFilter}/>}
 
+        <Button onClick={limpiarFormulario} icon='pi pi-times' label='Borrar' className='mt-4 mr-4 BorderFormNewUser'/>
         <Button disabled={selectedOptions[0]?false:true} onClick={submit} icon='pi pi-download' label='Generar Reporte' className='mt-4 BorderFormNewUser'/>
     </Card>
   )

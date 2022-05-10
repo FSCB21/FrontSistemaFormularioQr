@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
-import LugarRegistroService from '../../service/LugarRegistroService';
 import { Calendar } from 'primereact/calendar';
+import { SelectButton } from 'primereact/selectbutton';
+import LugarRegistroService from '../../service/LugarRegistroService';
 
 const FilterComponent = (params) => {
 
@@ -23,6 +24,11 @@ const FilterComponent = (params) => {
         {label:'Estado Código', val:'estado_codigo', type:3},
     ]
 
+    const optionsState = [
+        {label:'Canjeado', value:1},
+        {label:'Sin Canjear', value:0},
+    ]
+
     const monthNavigatorTemplate=(e)=> {
         return <Dropdown value={e.value} options={e.options} onChange={(event) => e.onChange(event.originalEvent, event.value)} style={{ lineHeight: 1 }} />;
       }
@@ -35,23 +41,40 @@ const FilterComponent = (params) => {
     const [valueOption, setValueOption] = useState('')
     const [valueOption2, setValueOption2] = useState('')
 
+    useEffect(() => {
+        lugarRegistroService.getAll().then(res=>{
+            setLugaresRegistro(res.data)
+        })
+    
+      return () => {
+        
+      }
+    }, []) // eslint-disable-line
+    
+
     const lugarRegistroService = new LugarRegistroService()
+    
     const onCampoChange = (e) =>{
         setValueOption('')
         setCampoSeleccionado(e.value)
-        console.log(e.value)
-        if(e.value.val==='lugar_registro'){
-            lugarRegistroService.getAll().then(res=>{
-                setLugaresRegistro(res.data)
-            })
-        }
     }
 
     const SaveOption = () =>{
-        let condiciones = []
-        condiciones.push({campo:campoSeleccionado.val, valor:valueOption, tipo:campoSeleccionado.type})
-       /*  params.setCondiciones() */
-       console.log(condiciones)
+        if((campoSeleccionado.type!==4 && valueOption) || (campoSeleccionado.type===4 && valueOption && valueOption2)){
+            let condiciones = []
+            condiciones.push({campo:campoSeleccionado.val, valor:valueOption, tipo:campoSeleccionado.type, valor2:valueOption2})
+            params.setCondicionesFilter([...params.condicionesFilter,...condiciones])
+            setCampoSeleccionado({val:''})
+            setValueOption('')
+            setValueOption2('')
+        }else
+            params.toast.current.show({severity:'error', summary: 'FXA Te Informa', detail: 'No pueden existir campos vacios', life: 3000});
+    }
+
+    const DeleteOption = (id) =>{
+        let condiciones = [...params.condicionesFilter]
+        condiciones.splice(id,1)
+        params.setCondicionesFilter(condiciones)
     }
 
   return (
@@ -67,14 +90,14 @@ const FilterComponent = (params) => {
                     <label>Campo:</label>
                 </span>
             </div>
-            {campoSeleccionado.val!=='fecha_nacimiento' && campoSeleccionado.val!=='createdAt' && <>
+            {campoSeleccionado.val!=='fecha_nacimiento' && campoSeleccionado.val!=='createdAt' && campoSeleccionado.val!=='estado_codigo' && <>
                 <div className="col-12 md:col-2 text-center">
                     <span className='text-base'>Contiene</span>
                 </div>
                 <div className="col-12 md:col-4">
                     <span className="p-float-label">
-                        {campoSeleccionado.val!=='lugar_registro' && 
-                            <InputText disabled={campoSeleccionado?false:true} value={valueOption} onChange={(e) => setValueOption(e.target.value)} />
+                        {campoSeleccionado.val!=='lugar_registro' && campoSeleccionado.val!=='estado_codigo'  && 
+                            <InputText disabled={campoSeleccionado?false:true} className='w-full' value={valueOption} onChange={(e) => setValueOption(e.target.value)} />
                         }
                         {campoSeleccionado.val==='lugar_registro'&&
                             <Dropdown className='w-full BorderFormNewUser' value={valueOption} options={lugaresRegistro} onChange={e=>setValueOption(e.value)} optionLabel='nombre_lugar_registro' filter filterBy="nombre_lugar_registro"
@@ -83,6 +106,12 @@ const FilterComponent = (params) => {
                         <label>Valor:</label>
                     </span>
                 </div>
+            </>}
+            {campoSeleccionado.val==='estado_codigo' && <>
+                <div className="col-12 md:col-2 text-center">
+                    <span className='text-base'>Estado</span>
+                </div>
+                <SelectButton className='col-12 md:col-4 flex' value={valueOption} options={optionsState} onChange={(e) => setValueOption(e.value)} />
             </>}
             {(campoSeleccionado.val==='fecha_nacimiento' || campoSeleccionado.val==='createdAt') && <>
                 <div className="col-12 md:col-3 text-center">
@@ -95,6 +124,40 @@ const FilterComponent = (params) => {
                 </div>
             </>}
         </div>
+        {
+            params.condicionesFilter.map((el,id)=>{
+                return <div className='grid mt-4' key={id}>
+                    <div className="col-12 md:col-1">
+                        <Button icon="pi pi-times" onClick={()=>DeleteOption(id)} className="mb-2"></Button>
+                    </div>
+                    <div className="col-12 md:col-4">
+                        <span className="p-float-label">
+                        <InputText disabled={true} value={el.campo} className='w-full' />
+                            <label>Campo:</label>
+                        </span>
+                    </div>
+                    {el.tipo!==4 && <>
+                        <div className="col-12 md:col-2 text-center">
+                            <span className='text-base'>Contiene</span>
+                        </div>
+                        <div className="col-12 md:col-4">
+                            <span className="p-float-label">
+                                <InputText disabled={true} className='w-full' value={el.valor.nombre_lugar_registro?el.valor.nombre_lugar_registro:el.valor} />
+                            </span>
+                        </div>
+                    </>}
+                    {el.tipo===4 && <>
+                        <div className="col-12 md:col-3 text-center">
+                            <Calendar disabled className='w-full' dateFormat="dd/mm/yy" value={el.valor}/>
+                        </div>
+                        <div className="col-12 md:col-3 text-center">
+                            <Calendar disabled className='w-full' dateFormat="dd/mm/yy" value={el.valor2} />
+                        </div>
+                    </>}
+                </div>
+            })
+        }
+        
     </div>)
 }
 
