@@ -60,7 +60,7 @@ const FilterComponent = (params) => {
     }
 
     const SaveOption = () =>{
-        if((campoSeleccionado.type!==4 && valueOption) || (campoSeleccionado.type===4 && valueOption && valueOption2)){
+        if((campoSeleccionado.type!==4 && (valueOption || valueOption===0)) || (campoSeleccionado.type===4 && valueOption && valueOption2)){
             let condiciones = []
             condiciones.push({campo:campoSeleccionado.val, valor:valueOption, tipo:campoSeleccionado.type, valor2:valueOption2})
             params.setCondicionesFilter([...params.condicionesFilter,...condiciones])

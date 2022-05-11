@@ -52,11 +52,11 @@ const ReporteUsuarios = () => {
                 condiciones_num.push(el)
             }
         })
-/* 
+
         genReporteService.genReporte({campos,foraneas, condiciones, condiciones_num}).then(res=>{
             exportExcel(res.data)
             toast.current.show({severity:'success', summary: 'FXA Te Informa', detail: 'Reporte Generado Con Exíto', life: 3000});
-        }) */
+        })
     }
 
     const limpiarFormulario = () =>{

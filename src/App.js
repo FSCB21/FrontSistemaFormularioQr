@@ -8,7 +8,7 @@ import { AppFooter } from './AppFooter';
 import { AppMenu } from './AppMenu';
 import { AppConfig } from './AppConfig';
 
-import Dashboard from './components/plantilla/Dashboard';
+import DashboardPlantilla from './components/plantilla/Dashboard';
 
 import PrimeReact from 'primereact/api';
 import { Tooltip } from 'primereact/tooltip';
@@ -29,6 +29,7 @@ import menu from './MenuConten'
 import DefaultTable from './components/usuario/DeFaultTable.jsx';
 import LugarRegistro from './pages/LugarRegistro';
 import ReporteUsuarios from './pages/ReporteUsuarios';
+import Dashboard from './pages/Dashboard';
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState('static');
@@ -182,7 +183,8 @@ const App = () => {
 
                 <div className="layout-main-container">
                     <div className="layout-main">
-                        <Route path="/dash/plantilla/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
+                        <Route path="/dash/" exact render={() => <Dashboard  colorMode={layoutColorMode}/>} />
+                        <Route path="/dash/plantilla/" exact render={() => <DashboardPlantilla colorMode={layoutColorMode} location={location} />} />
                         <Route path="/dash/usuarios/" exact ><Usuarios/></Route>
                         <Route path="/dash/usuarios-canjeado/" exact ><DefaultTable stateCode={1}/></Route>
                         <Route path="/dash/usuarios-sin-canjear/" exact ><DefaultTable stateCode={0}/></Route>
