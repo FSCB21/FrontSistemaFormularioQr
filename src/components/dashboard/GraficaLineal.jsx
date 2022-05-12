@@ -1,15 +1,18 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import { Chart } from 'primereact/chart'
 import DashBoardDataService from '../../service/DashBoardDataService';
 import RetornarNombreMes from '../../helpers/RetornarNombreMes';
 import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
-import { ColorPicker } from 'primereact/colorpicker';
 import LugarRegistroService from '../../service/LugarRegistroService';
-
+import GenerateRandom from '../../helpers/GenerateRandom'
+import { OverlayPanel } from 'primereact/overlaypanel';
+import { Calendar } from 'primereact/calendar';
 
 const GraficaLineal = (params) => {
 
+    const op = useRef(null);
+    const hexadecimal = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"]
 
     useEffect(() => {
         if (params.colorMode === 'light') {
@@ -19,15 +22,26 @@ const GraficaLineal = (params) => {
         }
     }, [params.colorMode]);
 
+    const [fechaInicio, setFechaInicio] = useState(new Date())
+    const [fechaFin, setFechaFin] = useState(new Date())
+
+    const traerFormatoFecha = (date, day) =>{
+        date = new Date(date)
+        let retorno = `${date.getFullYear()}-${(String(date.getMonth()+1).length===1)?"0"+(date.getMonth()+1):date.getMonth()+1}-${day}`
+        return retorno
+    }
+
     const dashBoardDataService = new DashBoardDataService()
     useEffect(() => {
-        let fecha_inicio =new Date()
-        let fecha_fin = new Date()
-        fecha_inicio.setMonth(fecha_inicio.getMonth()-12)
-        fecha_inicio = fecha_inicio.getFullYear() + '-' + (fecha_inicio.getMonth()+1) + '-' + fecha_inicio.getDate()
-        fecha_fin = fecha_fin.getFullYear() + '-' + (fecha_fin.getMonth()+1) + '-' + fecha_fin.getDate()
+        let fecha_inicio = fechaInicio
+        let fecha_fin = fechaFin
+        fecha_inicio.setMonth(fecha_inicio.getMonth()-6)
+        fecha_inicio = traerFormatoFecha(fecha_inicio, '01')
+        fecha_fin = traerFormatoFecha(fecha_fin, '31')
+
         dashBoardDataService.getDataMensualLugarRegistro({fecha_inicio,fecha_fin}).then(res=>{
             setLabels(res.data.meses)
+            setLugares([...lugares, {id:0,nombre:'Total General',color:'#E31D93'}])
             setDatasets([
                 ...datasets,
                 {
@@ -125,14 +139,15 @@ const GraficaLineal = (params) => {
         datasets: datasets
     };
   
-    const [lugaresRegistro, setLugaresRegistro] = useState([])
+    const [lugaresRegistro, setLugaresRegistro] = useState([
+        {id_lugar_registro: 0, nombre_lugar_registro: 'Total General', estado: true}
+    ])
     const [valueOption, setValueOption] = useState('')
-    const [colorOption, setColorOption] = useState('E31D93')
 
     const lugarRegistroService = new LugarRegistroService()
     useEffect(() => {
         lugarRegistroService.getAll().then(res=>{
-            setLugaresRegistro(res.data)
+            setLugaresRegistro([...lugaresRegistro,...res.data])
         })
     
       return () => {
@@ -141,46 +156,96 @@ const GraficaLineal = (params) => {
     }, []) // eslint-disable-line
 
     const AgregarAlmacen = () =>{
-        let fecha_inicio =new Date()
-        let fecha_fin = new Date()
-        fecha_inicio.setMonth(fecha_inicio.getMonth()-12)
-        fecha_inicio = fecha_inicio.getFullYear() + '-' + (fecha_inicio.getMonth()+1) + '-' + fecha_inicio.getDate()
-        fecha_fin = fecha_fin.getFullYear() + '-' + (fecha_fin.getMonth()+1) + '-' + fecha_fin.getDate()
-        dashBoardDataService.getDataMensualLugarRegistro({fecha_inicio,fecha_fin,id_lugar_registro:valueOption.id_lugar_registro}).then(res=>{
-            setDatasets([
-                ...datasets,
-                {
-                    label: valueOption.nombre_lugar_registro,
-                    data: res.data.valores,
-                    fill: false,
-                    backgroundColor: `#${colorOption}`,
-                    borderColor: `#${colorOption}`,
-                    tension: .4
+        if(valueOption){
+            let fecha_inicio = fechaInicio
+            let fecha_fin = fechaFin
+            fecha_inicio = traerFormatoFecha(fecha_inicio, '01')
+            fecha_fin = traerFormatoFecha(fecha_fin, '31')
+            dashBoardDataService.getDataMensualLugarRegistro({fecha_inicio,fecha_fin,id_lugar_registro:valueOption.id_lugar_registro}).then(res=>{
+                let color_aleatorio = "#";
+                for (let i=0;i<6;i++){
+                    let posarray = GenerateRandom(0,hexadecimal.length)
+                    color_aleatorio += hexadecimal[posarray]
                 }
-            ])
-        })
+                setLugares([...lugares, {id:valueOption.id_lugar_registro,nombre:valueOption.nombre_lugar_registro,color:color_aleatorio}])
+                setDatasets([
+                    ...datasets,
+                    {
+                        label: valueOption.nombre_lugar_registro,
+                        data: res.data.valores,
+                        fill: false,
+                        backgroundColor: color_aleatorio,
+                        borderColor: color_aleatorio,
+                        tension: .4
+                    }
+                ])
+                setValueOption(null)
+            })
+        }
     }
 
     const borrarData = () =>{
         setDatasets([])
+        setLugares([])
+    }
+
+    //Formulario Select Fecha
+    const [lugares, setLugares] = useState([])
+
+    const consultarPorFechas = () =>{
+        let fecha_inicio = fechaInicio
+        let fecha_fin = fechaFin
+        fecha_inicio = traerFormatoFecha(fecha_inicio, '01')
+        fecha_fin = traerFormatoFecha(fecha_fin, '31')
+        
+        let newDatasets = []
+        lugares.forEach(el=>{
+            dashBoardDataService.getDataMensualLugarRegistro({fecha_inicio,fecha_fin,id_lugar_registro:el.id}).then(res=>{
+                setLabels(res.data.meses)
+                newDatasets.push({
+                        label: el.nombre,
+                        data: res.data.valores,
+                        fill: false,
+                        backgroundColor: el.color,
+                        borderColor: el.color,
+                        tension: .4
+                    })
+            })
+        })
+        setDatasets(newDatasets)
+
+        
     }
 
     return (
-    <div className="col-12">
+    <div className="col-12 xl:col-6">
         <div className="card mb-0">
-            <div className='grid'>
-                <div className="col-12 md:col-6">
-                    <Chart type="line" data={lineData} options={lineOptions} o/>
-                </div>
-                <div className="col-12 md:col-6">
-                    <Dropdown className='col-12 md:col-5 BorderFormNewUser' value={valueOption} options={lugaresRegistro} onChange={e=>setValueOption(e.value)} optionLabel='nombre_lugar_registro' filter filterBy="nombre_lugar_registro"
-                        emptyMessage="No se encontraron resultados" emptyFilterMessage="No se encontraron resultados" />
-                    <ColorPicker value={colorOption} className='mx-6' onChange={(e) => setColorOption(e.value)}/>
-                    <Button label='Agregar Almacen' className='BorderFormNewUser mx-6 mt-6' onClick={AgregarAlmacen}/>
-                    <Button label='Borrar Todo' className='BorderFormNewUser mt-6' onClick={borrarData}/>
-                </div>
+            <Chart type="line" data={lineData} options={lineOptions} o/>
+            <Dropdown placeholder='Seleccionar Almacen' className='p-inputtext-sm col-12 BorderFormNewUser' value={valueOption} options={lugaresRegistro} onChange={e=>setValueOption(e.value)} optionLabel='nombre_lugar_registro' filter filterBy="nombre_lugar_registro"
+                emptyMessage="No se encontraron resultados" emptyFilterMessage="No se encontraron resultados" />
+            <div className="grid justify-content-center">
+                <Button label='Agregar Almacen' className='BorderFormNewUser mx-2 mt-4' onClick={AgregarAlmacen}/>
+                <Button label='Borrar Todo' className='BorderFormNewUser mx-2 mt-4' onClick={borrarData}/>
+                <Button icon='pi pi-calendar' className='p-button-text p-button-secondary BorderFormNewUser mx-2 mt-4' onClick={(e) => op.current.toggle(e)}/>
             </div>
         </div>
+
+
+        <OverlayPanel ref={op} /* onHide={formik.resetForm} */ id="overlay_panel" style={{ width: '250px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)' }} breakpoints={{'640px': '90vw'}}>
+            <div className="col-12 mt-2">
+                <span className="p-float-label">
+                    <Calendar readOnlyInput value={fechaInicio} maxDate={fechaFin} onChange={(e) => setFechaInicio(e.value)} view="month" dateFormat="yy/mm" />
+                    <label>Mes Inicio:</label>
+                </span>
+            </div>
+            <div className="col-12 mt-2">
+                <span className="p-float-label">
+                    <Calendar readOnlyInput value={fechaFin} minDate={fechaInicio} onChange={(e) => setFechaFin(e.value)} view="month" dateFormat="yy/mm" />
+                    <label>Mes Final:</label>
+                </span>
+            </div>
+            <Button type='button' onClick={consultarPorFechas} label='Consultar' className='mt-2 w-full'/>
+        </OverlayPanel>
     </div>
   )
 }
