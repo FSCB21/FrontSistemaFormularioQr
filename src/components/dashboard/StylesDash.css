@@ -1,0 +1,7 @@
+.hoverCard:hover{
+    transform: scale(105%);
+    cursor: default;
+}
+.hoverCard{
+    transition: .5s;
+}

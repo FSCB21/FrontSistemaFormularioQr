@@ -27,6 +27,10 @@ const GraficaLineal = (params) => {
 
     const traerFormatoFecha = (date, day) =>{
         date = new Date(date)
+        
+        if(day !== '01')
+            day = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+
         let retorno = `${date.getFullYear()}-${(String(date.getMonth()+1).length===1)?"0"+(date.getMonth()+1):date.getMonth()+1}-${day}`
         return retorno
     }
@@ -226,7 +230,7 @@ const GraficaLineal = (params) => {
             <div className="grid justify-content-center">
                 <Button label='Agregar Almacen' className='BorderFormNewUser mx-2 mt-4' onClick={AgregarAlmacen}/>
                 <Button label='Borrar Todo' className='BorderFormNewUser mx-2 mt-4' onClick={borrarData}/>
-                <Button icon='pi pi-calendar' className='p-button-text p-button-secondary BorderFormNewUser mx-2 mt-4' onClick={(e) => op.current.toggle(e)}/>
+                <Button tooltip='Cambiar Fecha' tooltipOptions={{position:'top'}} icon='pi pi-calendar' className='p-button-outlined BorderFormNewUser mx-2 mt-4' onClick={(e) => op.current.toggle(e)}/>
             </div>
         </div>
 

@@ -8,8 +8,6 @@ import { AppFooter } from './AppFooter';
 import { AppMenu } from './AppMenu';
 import { AppConfig } from './AppConfig';
 
-import DashboardPlantilla from './components/plantilla/Dashboard';
-
 import PrimeReact from 'primereact/api';
 import { Tooltip } from 'primereact/tooltip';
 
@@ -184,10 +182,9 @@ const App = () => {
                 <div className="layout-main-container">
                     <div className="layout-main">
                         <Route path="/dash/" exact render={() => <Dashboard  colorMode={layoutColorMode}/>} />
-                        <Route path="/dash/plantilla/" exact render={() => <DashboardPlantilla colorMode={layoutColorMode} location={location} />} />
-                        <Route path="/dash/usuarios/" exact ><Usuarios/></Route>
-                        <Route path="/dash/usuarios-canjeado/" exact ><DefaultTable stateCode={1}/></Route>
-                        <Route path="/dash/usuarios-sin-canjear/" exact ><DefaultTable stateCode={0}/></Route>
+                        <Route path="/dash/registros/" exact ><Usuarios/></Route>
+                        <Route path="/dash/registros-canjeado/" exact ><DefaultTable stateCode={1}/></Route>
+                        <Route path="/dash/registros-sin-canjear/" exact ><DefaultTable stateCode={0}/></Route>
                         <Route path="/dash/lugar-registro/" exact ><LugarRegistro/></Route>
                         <Route path="/dash/reporte" exact ><ReporteUsuarios/></Route>
                     </div>

@@ -1,5 +1,5 @@
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
@@ -19,8 +19,17 @@ import Terms from '../components/formNewUser/Terms';
 import 'react-phone-number-input/style.css'
 import LoadPage from '../components/LoadPage';
 import DialogCodeSend from '../components/formNewUser/DialogCodeSend';
+import ViewsCounterService from '../service/ViewsCounterService';
 
 const FormNewUser = () => {
+
+    useEffect(() => {
+        const viewsCounterService = new ViewsCounterService()
+        viewsCounterService.newPageVisit('FormRegister').then()
+      return () => {
+      }
+    }, [])
+    
 
     let today = new Date()
     const toast = useRef(null);
