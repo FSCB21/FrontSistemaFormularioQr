@@ -13,7 +13,6 @@ import UsuarioService from '../service/UsuarioService'
 import LoadPage from '../components/LoadPage'
 import { Button } from 'primereact/button'
 import { Calendar } from 'primereact/calendar'
-import { Toolbar } from 'primereact/toolbar';
 import '../components/usuario/usuario.css'
 import LugarRegistroService from '../service/LugarRegistroService'
 import { Toast } from 'primereact/toast'
@@ -114,7 +113,7 @@ const Usuarios = () => {
 
     const templateVerEstadoCodigo = (e) =>{
       return <>
-        {e.label}
+        <span className='hidden md:block'>{e.label}</span>
         <i className={e.icon + ' ml-2'}/>
       </>
     }
@@ -312,7 +311,7 @@ const Usuarios = () => {
   }
 
 
-  const leftContents = () =>{
+  const LeftContents = () =>{
     return <SelectButton value={verEstadoCodigoOption} options={optionsVerEstadoCOdigo} optionValue='value' onChange={(e) => {setVerEstadoCodigoOption(e.value); setLoadData(loadData+1)}} itemTemplate={templateVerEstadoCodigo} optionLabel="value" />
   }
 
@@ -322,7 +321,7 @@ const Usuarios = () => {
   //Lugares Registro
   const [ displayGestionarLugaresRegistro, setDisplayGestionarLugaresRegistro ] = useState(false)
 
-  const rightContents = () =>{
+  const RightContents = () =>{
     return <>
       <Button className='mx-3 p-button-outlined' onClick={()=>setDisplayGenerarReporte(true)} tooltip='Descargar Reporte' tooltipOptions={{position:'top'}} icon='pi pi-download'/>
       <Button className='p-button-outlined' onClick={()=>setDisplayGestionarLugaresRegistro(true)} tooltip='Gestionar Lugares De Registro' tooltipOptions={{position:'top'}} icon='pi pi-building'/>
@@ -331,16 +330,27 @@ const Usuarios = () => {
 
 
   return (<>
+
+      <div className='card w-full grid justify-content-center sm:justify-content-between ml-1'>
+        <div className='my-2'>
+          <LeftContents />
+        </div>
+        <div className='my-2'>
+          <RightContents />
+        </div>
+      </div>
+
       {loading && 
           <div className='relative h-screen w-full justify-content-center align-items-center flex'>
               <LoadPage/>
           </div>
       }
       <Toast ref={toast} />
+      
+
       {!loading &&
         <Card>
 
-          <Toolbar left={leftContents} right={rightContents} />
 
           <Paginator className='w-11 inline-flex' template={template1} first={customFirst} rows={customRows} totalRecords={totalRecords} onPageChange={onCustomPageChange}/>
           
@@ -360,17 +370,17 @@ const Usuarios = () => {
       }
       <OverlayPanel ref={op} onHide={deleteFilterData} dismissable style={{ width: '305px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)' }} breakpoints={{'640px': '90vw'}}>
         <SelectButton optionLabel="name" optionValue="code" value={filterOption} options={filterOptions} onChange={(e) => setFilterOption(e.value)}/>
-        <Dropdown value={fieldOption} className='w-full mt-4 BorderFormNewUser' options={fieldOptions} onChange={e=>setFieldOption(e.value)} optionLabel="name" placeholder="Seleccione el campo" />
-        <InputText value={valueOption} placeholder='Escriba el valor' className='w-full mt-4' onChange={(e) => setValueOption(e.target.value)} />
-        <Button label='Filtrar' onClick={searchFiltered} className='w-full mt-4 BorderFormNewUser' disabled={(filterOption&&fieldOption&&valueOption)?false:true}/>
+        <Dropdown value={fieldOption} className='w-full BorderFormNewUser' options={fieldOptions} onChange={e=>setFieldOption(e.value)} optionLabel="name" placeholder="Seleccione el campo" />
+        <InputText value={valueOption} placeholder='Escriba el valor' className='w-full' onChange={(e) => setValueOption(e.target.value)} />
+        <Button label='Filtrar' onClick={searchFiltered} className='w-full BorderFormNewUser' disabled={(filterOption&&fieldOption&&valueOption)?false:true}/>
       </OverlayPanel>
       <OverlayPanel ref={opCalendar} onHide={deleteFilterData} dismissable style={{ width: '305px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)' }} breakpoints={{'640px': '90vw'}}>
         <Dropdown value={calendarOption} className='w-full BorderFormNewUser' options={calendarOptions} onChange={e=>setCalendarOption(e.value)} optionLabel="name" placeholder="Seleccione el campo" />
-        <Calendar placeholder='Fecha Inicio' className='w-full mt-4' dateFormat="dd/mm/yy" name="fecha_nacimiento" yearRange={`${today.getFullYear()-200}:${today.getFullYear()}`} id="fecha_nacimiento" value={fechaInicioValue} onChange={e=>setFechaInicioValue(e.value)}  monthNavigator yearNavigator style={{ borderRadius: "100%" }}
+        <Calendar placeholder='Fecha Inicio' className='w-full' dateFormat="dd/mm/yy" name="fecha_nacimiento" yearRange={`${today.getFullYear()-200}:${today.getFullYear()}`} id="fecha_nacimiento" value={fechaInicioValue} onChange={e=>setFechaInicioValue(e.value)}  monthNavigator yearNavigator style={{ borderRadius: "100%" }}
           monthNavigatorTemplate={monthNavigatorTemplate} yearNavigatorTemplate={yearNavigatorTemplate} />
-        <Calendar placeholder='Fecha Fin' className='w-full mt-4' dateFormat="dd/mm/yy" name="fecha_nacimiento" yearRange={`${today.getFullYear()-200}:${today.getFullYear()}`} id="fecha_nacimiento" value={fechaFinValue} onChange={e=>setFechaFinValue(e.value)}  monthNavigator yearNavigator style={{ borderRadius: "100%" }}
+        <Calendar placeholder='Fecha Fin' className='w-full' dateFormat="dd/mm/yy" name="fecha_nacimiento" yearRange={`${today.getFullYear()-200}:${today.getFullYear()}`} id="fecha_nacimiento" value={fechaFinValue} onChange={e=>setFechaFinValue(e.value)}  monthNavigator yearNavigator style={{ borderRadius: "100%" }}
           monthNavigatorTemplate={monthNavigatorTemplate} yearNavigatorTemplate={yearNavigatorTemplate} />
-        <Button label='Filtrar' onClick={CalendarFiltered} className='w-full mt-4 BorderFormNewUser' disabled={(calendarOption&&fechaInicioValue&&fechaFinValue)?false:true}/>
+        <Button label='Filtrar' onClick={CalendarFiltered} className='w-full BorderFormNewUser' disabled={(calendarOption&&fechaInicioValue&&fechaFinValue)?false:true}/>
       </OverlayPanel>
 
       <Dialog header="Generar Reporte" visible={displayGenerarReporte} className="w-11 md:w-8 xl:w-5" onHide={() => setDisplayGenerarReporte(false)}>

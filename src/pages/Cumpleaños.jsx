@@ -241,7 +241,7 @@ const Cumpleaños = () => {
         <Toast ref={toast} />
         <Toolbar className="mb-4 col-12" left={leftToolbarTemplate} right={rightToolbarTemplate}/>
         {!loading && <>
-            <ScrollPanel className='col-12 sm:col-6' style={{height: '70vh'}}>
+            <ScrollPanel className='col-12 md:col-6' style={{maxHeight: '70vh'}}>
 
                 <div className='grid w-full card'>
                     <div className='col-12 flex justify-content-between align-items-center'>
@@ -288,7 +288,7 @@ const Cumpleaños = () => {
                     {isEmptyArray(dataCumpleaños) && <div className='col-12'>Ninguno de los usuarios registrados cumple años en esta fecha :/</div>}
                 </div>
             </ScrollPanel >
-            <div className='col-12 sm:col-6'>
+            <div className='col-12 md:col-6'>
                     <Graficas/>
             </div>
         </>}
