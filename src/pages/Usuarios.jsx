@@ -13,10 +13,13 @@ import UsuarioService from '../service/UsuarioService'
 import LoadPage from '../components/LoadPage'
 import { Button } from 'primereact/button'
 import { Calendar } from 'primereact/calendar'
-
+import { Toolbar } from 'primereact/toolbar';
 import '../components/usuario/usuario.css'
 import LugarRegistroService from '../service/LugarRegistroService'
 import { Toast } from 'primereact/toast'
+import { Dialog } from 'primereact/dialog'
+import ReporteUsuarios from '../components/usuario/ReporteUsuarios'
+import LugarRegistro from '../components/usuario/LugarRegistro'
 
 const Usuarios = () => {
 
@@ -40,19 +43,19 @@ const Usuarios = () => {
         setLoading(true)
 
         if(dataFilteredCalendar){
-          usuarioService.getAllByRangeDate(dataFilteredCalendar.fechaInicioValue,dataFilteredCalendar.fechaFinValue,dataFilteredCalendar.calendarOption,currentPage-1,customRows).then(res=>{
+          usuarioService.getAllByRangeDate(dataFilteredCalendar.fechaInicioValue,dataFilteredCalendar.fechaFinValue,dataFilteredCalendar.calendarOption,currentPage-1,customRows, verEstadoCodigoOption).then(res=>{
             setUsuarios(res.data.rows)
             setTotalRecords(res.data.totalItems)
             setLoading(false)
           })
         }else if(dataFiltered){
-          usuarioService.getAllFiltered(dataFiltered.fieldOption,dataFiltered.valueOption,dataFiltered.filterOption,currentPage-1,customRows).then(res => {
+          usuarioService.getAllFiltered(dataFiltered.fieldOption,dataFiltered.valueOption,dataFiltered.filterOption,currentPage-1,customRows, verEstadoCodigoOption).then(res => {
             setUsuarios(res.data.rows)
             setTotalRecords(res.data.totalItems)
             setLoading(false)
           });
         }else{
-          usuarioService.getAll(currentPage-1,customRows).then(res => {
+          usuarioService.getAll(currentPage-1,customRows, verEstadoCodigoOption).then(res => {
             setUsuarios(res.data.rows)
             setTotalRecords(res.data.totalItems)
             setLoading(false)
@@ -99,6 +102,21 @@ const Usuarios = () => {
 
     const onPageInputChange = (event) => {
       setCurrentPage(event.target.value);
+    }
+
+    const [verEstadoCodigoOption, setVerEstadoCodigoOption] = useState(null)
+
+    const optionsVerEstadoCOdigo = [
+      {label:'Todo', icon:'pi pi-bars', value:null},
+      {label:'Canjeados', icon:'pi pi-check-circle', value:'1'},
+      {label:'Sin Canjear', icon:'pi pi-times-circle', value:'0'},
+    ]
+
+    const templateVerEstadoCodigo = (e) =>{
+      return <>
+        {e.label}
+        <i className={e.icon + ' ml-2'}/>
+      </>
     }
 
     const template1 = {
@@ -293,6 +311,25 @@ const Usuarios = () => {
     return <Dropdown value={e.value} options={e.options} onChange={(event) => e.onChange(event.originalEvent, event.value)} className="p-ml-2" style={{ lineHeight: 1 }} />;
   }
 
+
+  const leftContents = () =>{
+    return <SelectButton value={verEstadoCodigoOption} options={optionsVerEstadoCOdigo} optionValue='value' onChange={(e) => {setVerEstadoCodigoOption(e.value); setLoadData(loadData+1)}} itemTemplate={templateVerEstadoCodigo} optionLabel="value" />
+  }
+
+  //Reportes
+  const [ displayGenerarReporte, setDisplayGenerarReporte ] = useState(false)
+   
+  //Lugares Registro
+  const [ displayGestionarLugaresRegistro, setDisplayGestionarLugaresRegistro ] = useState(false)
+
+  const rightContents = () =>{
+    return <>
+      <Button className='mx-3 p-button-outlined' onClick={()=>setDisplayGenerarReporte(true)} tooltip='Descargar Reporte' tooltipOptions={{position:'top'}} icon='pi pi-download'/>
+      <Button className='p-button-outlined' onClick={()=>setDisplayGestionarLugaresRegistro(true)} tooltip='Gestionar Lugares De Registro' tooltipOptions={{position:'top'}} icon='pi pi-building'/>
+    </>
+  }
+
+
   return (<>
       {loading && 
           <div className='relative h-screen w-full justify-content-center align-items-center flex'>
@@ -302,7 +339,11 @@ const Usuarios = () => {
       <Toast ref={toast} />
       {!loading &&
         <Card>
+
+          <Toolbar left={leftContents} right={rightContents} />
+
           <Paginator className='w-11 inline-flex' template={template1} first={customFirst} rows={customRows} totalRecords={totalRecords} onPageChange={onCustomPageChange}/>
+          
           <DataTable value={usuarios} responsiveLayout="scroll" size="small" emptyMessage='Ups... No se encontro un registro para mostrar 😧'
             editMode="row" dataKey="id" onRowEditComplete={onRowEditComplete}>
               <Column sortable field="nombres" editor={(options) => textEditor(options)} header="Nombres"/>
@@ -331,6 +372,14 @@ const Usuarios = () => {
           monthNavigatorTemplate={monthNavigatorTemplate} yearNavigatorTemplate={yearNavigatorTemplate} />
         <Button label='Filtrar' onClick={CalendarFiltered} className='w-full mt-4 BorderFormNewUser' disabled={(calendarOption&&fechaInicioValue&&fechaFinValue)?false:true}/>
       </OverlayPanel>
+
+      <Dialog header="Generar Reporte" visible={displayGenerarReporte} className="w-11 md:w-8 xl:w-5" onHide={() => setDisplayGenerarReporte(false)}>
+        <ReporteUsuarios/>
+      </Dialog>
+
+      <Dialog header="Gestionar Lugares Registro" visible={displayGestionarLugaresRegistro} className="w-11 md:w-9 xl:w-6" onHide={() => setDisplayGestionarLugaresRegistro(false)}>
+        <LugarRegistro/>
+      </Dialog>
   </>)
 }
 

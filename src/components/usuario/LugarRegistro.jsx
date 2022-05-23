@@ -6,12 +6,12 @@ import { Toast } from 'primereact/toast'
 import { InputText } from 'primereact/inputtext'
 import { Button } from 'primereact/button'
 import { FilterMatchMode } from 'primereact/api';
-import LoadPage from '../components/LoadPage'
-import LugarRegistroService from '../service/LugarRegistroService'
+import LoadPage from '../LoadPage'
+import LugarRegistroService from '../../service/LugarRegistroService'
 import { OverlayPanel } from 'primereact/overlaypanel'
 import classNames from 'classnames'
 import { useFormik } from 'formik'
-import validationLugarRegistro from '../validations/validationLugarRegistro'
+import validationLugarRegistro from '../../validations/validationLugarRegistro'
 
 const LugarRegistro = () => {
 

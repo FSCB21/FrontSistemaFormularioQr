@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react'
-import { Card } from 'primereact/card'
 import { MultiSelect } from 'primereact/multiselect';
 import { Button } from 'primereact/button';
 import { InputSwitch } from 'primereact/inputswitch';
-import GenReporteService from '../service/GenReporteService';
-import FilterComponent from '../components/reporte/FilterComponent';
+import GenReporteService from '../../service/GenReporteService';
+import FilterComponent from './FilterComponent';
 import { Toast } from 'primereact/toast';
 const ReporteUsuarios = () => {
 
@@ -93,7 +92,7 @@ const ReporteUsuarios = () => {
     const [condicionesFilter, setCondicionesFilter] = useState([])
 
   return (
-    <Card>
+    <div>
         <Toast ref={toast} />
         <h5>Seleccione los campos a exportar:</h5>
         <div className='mt-4 w-6'>
@@ -108,7 +107,7 @@ const ReporteUsuarios = () => {
 
         <Button onClick={limpiarFormulario} icon='pi pi-times' label='Borrar' className='mt-4 mr-4 BorderFormNewUser'/>
         <Button disabled={selectedOptions[0]?false:true} onClick={submit} icon='pi pi-download' label='Generar Reporte' className='mt-4 BorderFormNewUser'/>
-    </Card>
+    </div>
   )
 }
 

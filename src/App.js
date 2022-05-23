@@ -24,10 +24,8 @@ import LoginPage from './pages/LoginPage';
 import Usuarios from './pages/Usuarios';
 
 import menu from './MenuConten'
-import DefaultTable from './components/usuario/DeFaultTable.jsx';
-import LugarRegistro from './pages/LugarRegistro';
-import ReporteUsuarios from './pages/ReporteUsuarios';
 import Dashboard from './pages/Dashboard';
+import Cumpleaños from './pages/Cumpleaños';
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState('static');
@@ -183,10 +181,7 @@ const App = () => {
                     <div className="layout-main">
                         <Route path="/dash/" exact render={() => <Dashboard  colorMode={layoutColorMode}/>} />
                         <Route path="/dash/registros/" exact ><Usuarios/></Route>
-                        <Route path="/dash/registros-canjeado/" exact ><DefaultTable stateCode={1}/></Route>
-                        <Route path="/dash/registros-sin-canjear/" exact ><DefaultTable stateCode={0}/></Route>
-                        <Route path="/dash/lugar-registro/" exact ><LugarRegistro/></Route>
-                        <Route path="/dash/reporte" exact ><ReporteUsuarios/></Route>
+                        <Route path="/dash/cumpleaños" exact ><Cumpleaños/></Route>
                     </div>
 
                     <AppFooter layoutColorMode={layoutColorMode} />

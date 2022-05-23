@@ -1,0 +1,16 @@
+
+.cumpleaños-card:hover{
+    transform: scale(110%);
+    cursor: pointer;
+}
+.cumpleaños-card{
+    transition: .8s;
+}
+
+.icon-info-cumpleaños{
+    transition: 1s;
+}
+.icon-info-cumpleaños:hover{
+    color: rgb(155, 33, 118);
+    transform: scale(110%);
+}
