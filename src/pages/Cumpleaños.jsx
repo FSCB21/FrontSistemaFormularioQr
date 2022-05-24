@@ -20,6 +20,8 @@ import '../components/cumpleaños/cumpleaños.css'
 import Info from '../components/cumpleaños/Info';
 import Graficas from '../components/cumpleaños/Graficas';
 import InfoFilter from '../components/cumpleaños/InfoFilter';
+import ColoresGraficas from '../components/cumpleaños/ColoresGraficas';
+import GenerateRandom from '../helpers/GenerateRandom';
 
 const Cumpleaños = () => {
     const op = useRef(null);
@@ -35,11 +37,13 @@ const Cumpleaños = () => {
     const [loading, setLoading] = useState(false)
     
     const [reload, setReload] = useState(0)
+
     useEffect(() => {
         setLoading(true)
        
             const cumpleañosService = new CumpleañosService()
             cumpleañosService.getByRange(fechaCumpleaños[0],fechaCumpleaños[1]?fechaCumpleaños[1]:fechaCumpleaños[0]).then(res=>{
+                
                 setDataCumpleaños(res.data)
                 obtenerLugaresRegistro(res.data)
                 calcularMinimoMaximoEdad(res.data)
@@ -181,10 +185,9 @@ const Cumpleaños = () => {
         });
         lugares = [...new Set(lugares)];
         lugares.sort()
-
         let lugaresB = []
         lugares.forEach(el => {
-            lugaresB.push({nombre_lugar:el})
+            lugaresB.push({nombre_lugar:el, bgColor:ColoresGraficas[GenerateRandom(0,ColoresGraficas.length)]})
         });
         setLugaresRegistroOptions(lugaresB)
     }
@@ -194,6 +197,7 @@ const Cumpleaños = () => {
         setLoading(true)
         cumpleañosService.getByRangeFilterLugar(fechaCumpleaños[0],fechaCumpleaños[1]?fechaCumpleaños[1]:fechaCumpleaños[0],data).then(res=>{
             setDataCumpleaños(res.data)
+            obtenerLugaresRegistro(res.data)
             setLoading(false)
             setFilterIcon(true)
         })
@@ -289,7 +293,7 @@ const Cumpleaños = () => {
                 </div>
             </ScrollPanel >
             <div className='col-12 md:col-6'>
-                    <Graficas/>
+                    <Graficas dataCumpleaños={dataCumpleaños} lugaresRegistroOptions={lugaresRegistroOptions}/>
             </div>
         </>}
 
