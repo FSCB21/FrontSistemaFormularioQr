@@ -1,12 +1,16 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import { Chart } from 'primereact/chart';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { MultiSelect } from 'primereact/multiselect';
 import { Divider } from 'primereact/divider';
+import { Button } from 'primereact/button';
 import ColoresGraficas from './ColoresGraficas';
 import GenerateRandom from '../../helpers/GenerateRandom';
+import { OverlayPanel } from 'primereact/overlaypanel';
 
 const Graficas = (params) => {
+    const op = useRef(null);
+     
     const basicOptions = {
         maintainAspectRatio: false,
         aspectRatio: 1,
@@ -119,11 +123,10 @@ const Graficas = (params) => {
                 </Divider>
                 <MultiSelect className='w-full BorderFormNewUser' options={params.lugaresRegistroOptions}value={dataOpcionesLugaresRegistro} onChange={(e) => {setDataOpcionesLugaresRegistro(e.value);setReload(reload+1)}} optionLabel="nombre_lugar" filter filterBy='nombre_lugar' placeholder="Seleccione Lugares" display="chip" />
             </TabPanel>
-            <TabPanel header={<span className='font-normal'>Gráfica Edad</span>} className='flex justify-content-center'>
-                <Chart type="doughnut" data={dataGraficaEdad} options={basicOptions} style={{ position: 'relative', width: 'auto' }} />
+            <TabPanel header={<span className='font-normal'>Gráfica Edad</span>}>
+                <Chart type="pie" data={dataGraficaEdad} options={basicOptions} style={{ position: 'relative', width: 'auto' }} />
             </TabPanel>
         </TabView>
-
     </div>
   )
 }

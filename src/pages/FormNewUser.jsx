@@ -198,7 +198,7 @@ const FormNewUser = () => {
             </div>
             }
 
-            <Dialog header="El Código ha sido enviado" visible={displaySendSms} className="w-11 md:w-7 xl:w-4" onHide={() => {setDisplaySendSms(false);formik.resetForm()}}>
+            <Dialog closable={false} visible={displaySendSms} className="w-11 md:w-8 xl:w-5" onHide={() => {setDisplaySendSms(false);formik.resetForm()}}>
                 <DialogCodeSend telefono_contacto={formik.values.telefono_contacto} closeDialog={() => {setDisplaySendSms(false);formik.resetForm()}} toast={toast}/>
             </Dialog>
 

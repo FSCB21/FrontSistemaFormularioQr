@@ -12,6 +12,7 @@ import { ScrollPanel  } from 'primereact/scrollpanel';
 import { Slider } from 'primereact/slider';
 import { MultiSelect } from 'primereact/multiselect';
 import { SelectButton } from 'primereact/selectbutton';
+import { BreadCrumb } from 'primereact/breadcrumb';
 
 import LoadPage from '../components/LoadPage'
 import { isEmptyArray } from 'formik';
@@ -22,6 +23,9 @@ import Graficas from '../components/cumpleaños/Graficas';
 import InfoFilter from '../components/cumpleaños/InfoFilter';
 import ColoresGraficas from '../components/cumpleaños/ColoresGraficas';
 import GenerateRandom from '../helpers/GenerateRandom';
+
+//icons
+import { IoBalloon } from 'react-icons/io5';
 
 const Cumpleaños = () => {
     const op = useRef(null);
@@ -60,13 +64,13 @@ const Cumpleaños = () => {
             let fechaCumpleaños2 = new Date(fechaCumpleaños)
 
             if(fechaCumpleaños2.getDate() === hoy.getDate() && fechaCumpleaños2.getMonth() === hoy.getMonth())
-                return <h5 className='mx-3 mt-3'>Cumpleaños hoy {hoy.getDate()} de {RetornarNombreMes(hoy.getMonth()+1)} <i className='pi pi-info-circle mx-3 text-lg cursor-pointer icon-info-cumpleaños' onClick={e=>opInfo.current.toggle(e)}/></h5>
+                return <h6 className='mx-3 mt-3'>Cumpleaños hoy {hoy.getDate()} de {RetornarNombreMes(hoy.getMonth()+1)} </h6>
             else
-                return <h5 className='mx-3 mt-3'>Cumpleaños día {fechaCumpleaños2.getDate()} de {RetornarNombreMes(fechaCumpleaños2.getMonth()+1)}<i className='pi pi-info-circle mx-3 text-lg cursor-pointer icon-info-cumpleaños' onClick={e=>opInfo.current.toggle(e)}/></h5>
+                return <h6 className='mx-3 mt-3'>Cumpleaños día {fechaCumpleaños2.getDate()} de {RetornarNombreMes(fechaCumpleaños2.getMonth()+1)}</h6>
         }else{
             let fechaCumpleañosA = new Date(fechaCumpleaños[0])
             let fechaCumpleañosB = new Date(fechaCumpleaños[1])
-            return <h5 className='mx-3 mt-3'>Cumpleaños desde {fechaCumpleañosA.getDate()} de {RetornarNombreMes(fechaCumpleañosA.getMonth()+1)} Hasta {fechaCumpleañosB.getDate()} de {RetornarNombreMes(fechaCumpleañosB.getMonth()+1)}<i className='pi pi-info-circle mx-3 text-lg cursor-pointer icon-info-cumpleaños' onClick={e=>opInfo.current.toggle(e)}/></h5>
+            return <h6 className='mx-3 mt-3'>Cumpleaños desde {fechaCumpleañosA.getDate()} de {RetornarNombreMes(fechaCumpleañosA.getMonth()+1)} Hasta {fechaCumpleañosB.getDate()} de {RetornarNombreMes(fechaCumpleañosB.getMonth()+1)}</h6>
         }
     }
     const rightToolbarTemplate= () =>{
@@ -240,9 +244,23 @@ const Cumpleaños = () => {
         })
     }
 
+    const items = [
+        { label: 'Cumpleaños', url: '/#/dash/cumpleaños' }
+    ];
+    
+    const home = { icon: 'pi pi-home', url: '/#/dash' }
     return (
     <div className='grid'>
         <Toast ref={toast} />
+
+        <div className='col-12 card grid justify-content-between align-items-center'>
+            <div className='h-full flex justify-content-between align-items-cente'>    
+                <h4 className='inline-block my-0 '><IoBalloon className='text-pink-500'/>Cumpleaños<IoBalloon className='text-pink-500' /></h4>            
+                <i className='pi pi-info-circle text-purple-300 mx-3 text-2xl cursor-pointer icon-info-cumpleaños' onClick={e=>opInfo.current.toggle(e)}/>
+            </div>
+            <BreadCrumb className='inline-block mx-4 p-0' style={{border:'none'}} model={items} home={home}/>
+        </div>
+
         <Toolbar className="mb-4 col-12" left={leftToolbarTemplate} right={rightToolbarTemplate}/>
         {!loading && <>
             <ScrollPanel className='col-12 md:col-6' style={{maxHeight: '70vh'}}>

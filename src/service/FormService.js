@@ -12,6 +12,10 @@ class FormService  {
         return axios.post(`${API}/err-send-sms`, {telefono_contacto:num_tel})
     }
 
+    changeNumber(data){
+        return axios.post(`${API}/err-change-number`, data)
+    }
+
 }
 
 export default FormService

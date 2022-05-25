@@ -9,6 +9,9 @@ import { useHistory } from 'react-router-dom';
 
 import './StylesDash.css'
 
+//iconos
+import { FaSms, FaRegFolderOpen, FaEye, FaUsers } from 'react-icons/fa';
+
 const CardsDash = () => {
 
     const history = useHistory()
@@ -55,7 +58,7 @@ const CardsDash = () => {
                             <span className="block text-500 font-medium mb-3">Usuarios</span>
                         </div>
                         <div className="flex align-items-center justify-content-center bg-cyan-100 border-round" style={{width: '2.5rem', height: '2.5rem'}}>
-                            <i className="pi pi-users text-cyan-500 text-xl"/>
+                            <FaUsers className="pi pi-comment text-cyan-500 text-2xl"/>
                         </div>
                     </div>
                     <span className="text-green-500 font-medium">Sección Perfil de usuarios</span>
@@ -76,7 +79,7 @@ const CardsDash = () => {
                             <div className="text-900 font-medium text-xl">{dataCartaCounter.totalViews}</div>
                         </div>
                         <div className="flex align-items-center justify-content-center bg-orange-100 border-round" style={{width: '2.5rem', height: '2.5rem'}}>
-                            <i className="pi pi-star text-orange-500 text-xl"/>
+                            <FaEye className="pi pi-comment text-orange-500 text-2xl"/>
                         </div>
                     </div>
                     <span className="text-green-500 font-medium">{dataCartaCounter.percentViews}% </span>
@@ -98,7 +101,7 @@ const CardsDash = () => {
                             <div className="text-900 font-medium text-xl"><span className='cursor-pointer' onClick={()=>history.push('/dash/registros')}>{dataCartas.cantidadTotal}</span></div>
                         </div>
                         <div className="flex align-items-center justify-content-center bg-blue-100 border-round" style={{width: '2.5rem', height: '2.5rem'}}>
-                            <i className="pi pi-folder text-blue-500 text-xl"/>
+                            <FaRegFolderOpen className="pi pi-comment text-blue-500 text-2xl"/>
                         </div>
                     </div>
                     <span className="text-green-500 font-medium cursor-pointer" onClick={()=>history.push('/dash/registros-canjeado')}>{dataCartas.cantidadCanjeado} </span>
@@ -119,7 +122,7 @@ const CardsDash = () => {
                             <span className="block text-500 font-medium mb-3">Contactos</span>
                         </div>
                         <div className="flex align-items-center justify-content-center bg-purple-100 border-round" style={{width: '2.5rem', height: '2.5rem'}}>
-                            <i className="pi pi-comment text-purple-500 text-xl"/>
+                            <FaSms className="pi pi-comment text-purple-500 text-2xl"/>
                         </div>
                     </div>
                     <span className="text-green-500 font-medium">Generar Campañas</span>
