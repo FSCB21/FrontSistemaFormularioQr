@@ -12,6 +12,10 @@ class DashBoardDataService  {
         return axios.get(`${API}/get-data-count-lugar-registro?fecha_inicio=${data.fecha_inicio}&fecha_fin=${data.fecha_fin}&id_lugar_registro=${data.id_lugar_registro?data.id_lugar_registro:''}`)
     }
 
+    getDataEdades(){
+        return axios.get(`${API}/get-data-age`)
+    }
+
 }
 
 export default DashBoardDataService

@@ -256,7 +256,7 @@ const Cumpleaños = () => {
     }
 
     const items = [
-        { label: 'Cumpleaños', url: '/#/dash/cumpleaños' }
+        { label: 'cumpleaños', url: '/#/dash/cumpleaños' }
     ];
     
     const home = { icon: 'pi pi-home', url: '/#/dash' }
@@ -264,7 +264,7 @@ const Cumpleaños = () => {
     <div className='grid'>
         <Toast ref={toast} />
 
-        <div className='col-12 card grid justify-content-between align-items-center'>
+        <div className='col-12 card grid justify-content-between align-items-center ml-1'>
             <div className='h-full flex justify-content-between align-items-cente'>    
                 <h4 className='inline-block my-0 '><IoBalloon className='text-pink-500'/>Cumpleaños<IoBalloon className='text-pink-500' /></h4>            
                 <i className='pi pi-info-circle text-purple-300 mx-3 text-2xl cursor-pointer icon-info-cumpleaños' onClick={e=>opInfo.current.toggle(e)}/>

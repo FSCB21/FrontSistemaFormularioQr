@@ -5,7 +5,6 @@ import { MultiSelect } from 'primereact/multiselect';
 import { Divider } from 'primereact/divider';
 import { Button } from 'primereact/button';
 import ColoresGraficas from './ColoresGraficas';
-import GenerateRandom from '../../helpers/GenerateRandom';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { Slider } from 'primereact/slider';
 import { ScrollPanel } from 'primereact/scrollpanel';
@@ -187,12 +186,11 @@ const Graficas = (params) => {
 
         totalAños.forEach(el => {
             arrayFilter.forEach((filtro,id) => {
-                if(el > filtro [0] && el < filtro [1])
+                if(el > filtro[0] && el < filtro[1])
                     filterCounter[id].total++
             });
         });
 
-        console.log(filterCounter)
         setGraficData(filterCounter, setDataGraficaEdad)
     }
 

@@ -19,6 +19,7 @@ import { Toast } from 'primereact/toast'
 import { Dialog } from 'primereact/dialog'
 import ReporteUsuarios from '../components/usuario/ReporteUsuarios'
 import LugarRegistro from '../components/usuario/LugarRegistro'
+import { BreadCrumb } from 'primereact/breadcrumb'
 
 const Usuarios = () => {
 
@@ -327,8 +328,20 @@ const Usuarios = () => {
     </>
   }
 
+  const items = [
+    { label: 'registros', url: '/#/dash/registros' }
+  ];
 
+  const home = { icon: 'pi pi-home', url: '/#/dash' }
   return (<>
+
+      <div className='col-12 card grid justify-content-between align-items-center mb-4 ml-1'>
+          <div className='h-full flex justify-content-between align-items-cente'>    
+              <h5 className='inline-block my-0 '>Registros</h5>            
+              <i className='pi pi-info-circle text-purple-300 mx-3 text-2xl cursor-pointer icon-info-cumpleaños'/>
+          </div>
+          <BreadCrumb className='inline-block mx-4 p-1' style={{border:'none'}} model={items} home={home}/>
+      </div>
 
       <div className='card w-full grid justify-content-center sm:justify-content-between ml-1'>
         <div className='my-2'>
