@@ -310,7 +310,6 @@ const Usuarios = () => {
     return <Dropdown value={e.value} options={e.options} onChange={(event) => e.onChange(event.originalEvent, event.value)} className="p-ml-2" style={{ lineHeight: 1 }} />;
   }
 
-
   const LeftContents = () =>{
     return <SelectButton value={verEstadoCodigoOption} options={optionsVerEstadoCOdigo} optionValue='value' onChange={(e) => {setVerEstadoCodigoOption(e.value); setLoadData(loadData+1)}} itemTemplate={templateVerEstadoCodigo} optionLabel="value" />
   }

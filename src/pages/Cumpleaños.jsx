@@ -42,9 +42,20 @@ const Cumpleaños = () => {
     
     const [reload, setReload] = useState(0)
 
+    const [arregloNumerosColores, setArreloNumerosColores] = useState([])
+
+    const setColors = () =>{
+        let i = []
+
+        for (let index = 0; index <= 100; index++) {
+            i.push(GenerateRandom(0,100))
+        }
+        setArreloNumerosColores(i)
+    }
+
     useEffect(() => {
         setLoading(true)
-       
+        setColors()
             const cumpleañosService = new CumpleañosService()
             cumpleañosService.getByRange(fechaCumpleaños[0],fechaCumpleaños[1]?fechaCumpleaños[1]:fechaCumpleaños[0]).then(res=>{
                 
@@ -311,7 +322,7 @@ const Cumpleaños = () => {
                 </div>
             </ScrollPanel >
             <div className='col-12 md:col-6'>
-                    <Graficas dataCumpleaños={dataCumpleaños} lugaresRegistroOptions={lugaresRegistroOptions}/>
+                    <Graficas dataCumpleaños={dataCumpleaños} lugaresRegistroOptions={lugaresRegistroOptions} arregloNumerosColores={arregloNumerosColores}/>
             </div>
         </>}
 
