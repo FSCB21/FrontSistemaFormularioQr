@@ -198,24 +198,29 @@ const Graficas = (params) => {
     <div className="card">
         <h5><span className='text-purple-700'>Cantidad de cumpleañeros:</span> {params.dataCumpleaños.length}</h5>
         
-    
-        <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
-            <TabPanel header={<span className='font-normal'>Gráfica Lugares Registro</span>}>
-                <Chart type="doughnut" data={dataLugaresRegistro} options={basicOptions} style={{ position: 'relative', width: 'auto' }}/>
-                <Divider align="left" type="dashed">
-                    <small>Lugares A mostrar</small>
-                </Divider>
-                <MultiSelect className='w-full BorderFormNewUser' options={params.lugaresRegistroOptions}value={dataOpcionesLugaresRegistro} onChange={(e) => {setDataOpcionesLugaresRegistro(e.value);setReload(reload+1)}} optionLabel="nombre_lugar" filter filterBy='nombre_lugar' placeholder="Seleccione Lugares" display="chip" />
-            </TabPanel>
-            <TabPanel header={<span className='font-normal'>Gráfica Edad</span>}>
-                <Chart type="pie" data={dataGraficaEdad} options={basicOptions} style={{ position: 'relative', width: 'auto' }} />
-                <Divider align="left" type="dashed">
-                    <small>Filtrar Grafica</small>
-                </Divider>
-                <Button label='Filtro Personalizado' icon='pi pi-pencil' className='p-button-outlined BorderFormNewUser mx-3 my-2' onClick={e=>op.current.toggle(e)}/>
-                <Button label='Quitar Filtro' icon='pi pi-trash' className='p-button-outlined BorderFormNewUser my-2 p-button-secondary' onClick={()=>getDataGraficaEdad(params.dataCumpleaños)}/>
-            </TabPanel>
-        </TabView>
+        {params.dataCumpleaños[0] && <>
+            <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
+                <TabPanel header={<span className='font-normal'>Gráfica Lugares Registro</span>}>
+                    <Chart type="doughnut" data={dataLugaresRegistro} options={basicOptions} style={{ position: 'relative', width: 'auto' }}/>
+                    <Divider align="left" type="dashed">
+                        <small>Lugares A mostrar</small>
+                    </Divider>
+                    <MultiSelect className='w-full BorderFormNewUser' options={params.lugaresRegistroOptions}value={dataOpcionesLugaresRegistro} onChange={(e) => {setDataOpcionesLugaresRegistro(e.value);setReload(reload+1)}} optionLabel="nombre_lugar" filter filterBy='nombre_lugar' placeholder="Seleccione Lugares" display="chip" />
+                </TabPanel>
+                <TabPanel header={<span className='font-normal'>Gráfica Edad</span>}>
+                    <Chart type="pie" data={dataGraficaEdad} options={basicOptions} style={{ position: 'relative', width: 'auto' }} />
+                    <Divider align="left" type="dashed">
+                        <small>Filtrar Grafica</small>
+                    </Divider>
+                    <Button label='Filtro Personalizado' icon='pi pi-pencil' className='p-button-outlined BorderFormNewUser mx-3 my-2' onClick={e=>op.current.toggle(e)}/>
+                    <Button label='Quitar Filtro' icon='pi pi-trash' className='p-button-outlined BorderFormNewUser my-2 p-button-secondary' onClick={()=>getDataGraficaEdad(params.dataCumpleaños)}/>
+                </TabPanel>
+            </TabView>
+        </>}
+
+        {!params.dataCumpleaños[0] && <>
+            No hay datos para crear una gráfica
+        </>}
 
         <OverlayPanel ref={op} style={{ width: '450px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)' }} breakpoints={{'640px': '95vw'}}>
             <h4>Filtro personalizado</h4>

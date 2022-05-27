@@ -66,19 +66,20 @@ const GraficaDeDonaEdades = () => {
             edades.push(edad)
         })
 
-        let edadesB= [...new Set(edades)];
+        let arrayFilter = [[0,20],[21,30],[31,40],[41,50],[51,100]]
+    
         let edadesContadas = []
-        edadesB.forEach((el,id)=>{
-            edadesContadas.push({edad:` ${el} años`, bgColor:ColoresGraficas[arreloNumerosColores[id]]})
+
+        arrayFilter.forEach((el,id)=>{
+            edadesContadas.push({label:`${el[0]} años hasta ${el[1]} años`, bgColor:ColoresGraficas[arreloNumerosColores[id]], total:0})
         })
 
-        edades.forEach(el=>{
-            edadesB.forEach((edad,id)=>{
-                if(el===edad){
-                    edadesContadas[id].cont?edadesContadas[id].cont++:edadesContadas[id].cont=1
-                }
-            })
-        })
+        edades.forEach(el => {
+            arrayFilter.forEach((filtro,id) => {
+                if(el > filtro[0] && el < filtro[1])
+                    edadesContadas[id].total++
+            });
+        });
         setGraficData(edadesContadas, setDataGraficaEdad)
     }
 
