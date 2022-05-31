@@ -120,8 +120,9 @@ const CardsDash = () => {
                     <span className="text-500">Personas hoy</span>
                 </>}
                 {loading && <>
-                        <Skeleton className="mb-2 w-8"></Skeleton>
-                        <Skeleton height="2rem" className='w-10'></Skeleton>
+                    <Skeleton className="mb-2 w-8"></Skeleton>
+                    <Skeleton className="mb-2 w-5"></Skeleton>
+                    <Skeleton height="2rem" className='w-10'></Skeleton>
                 </>}
 
             </div>

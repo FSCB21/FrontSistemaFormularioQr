@@ -225,7 +225,7 @@ const GraficaLineal = (params) => {
     <div className="col-12 xl:col-6" id='graficaMensual'>
         <div className="card mb-0">
             <h5 className='mb-4'>Gráfica Registros Mensuales:</h5>
-            <Chart type="line" data={lineData} options={lineOptions} o/>
+            <Chart type="line" data={lineData} options={lineOptions} />
             <Dropdown placeholder='Seleccionar Almacen' className='p-inputtext-sm col-12 BorderFormNewUser' value={valueOption} options={lugaresRegistro} onChange={e=>setValueOption(e.value)} optionLabel='nombre_lugar_registro' filter filterBy="nombre_lugar_registro"
                 emptyMessage="No se encontraron resultados" emptyFilterMessage="No se encontraron resultados" />
             <div className="grid justify-content-center">

@@ -1,16 +1,17 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { RadioButton } from 'primereact/radiobutton';
-import { InputSwitch } from 'primereact/inputswitch';
 import classNames from 'classnames';
 import {Button} from "primereact/button";
 import { Route } from 'react-router-dom';
-
+import { useCookies } from 'react-cookie';
 export const AppConfig = (props) => {
 
+    const [cookies, setCookie] = useCookies(['scaleCookie','themeCookie']);
+
     const [active, setActive] = useState(false);
-    const [scale, setScale] = useState(14);
-    const [scales] = useState([12,13,14,15,16]);
-    const [theme, setTheme] = useState('lara-light-indigo');
+    const [scale, setScale] = useState(cookies.scaleCookie?parseInt(cookies.scaleCookie):14);
+    const [scales] = useState([11,12,13,14,15,16,17]);
+    const [theme, setTheme] = useState(cookies.themeCookie?cookies.themeCookie:'lara-light-indigo');
     const config = useRef(null);
     let outsideClickListener = useRef(null);
 
@@ -52,10 +53,14 @@ export const AppConfig = (props) => {
     }
 
     const decrementScale = () => {
+        let i = (prevState) => --prevState
+        setCookie('scaleCookie', i(scale), {path: '/'})
         setScale((prevState) => --prevState);
     }
 
     const incrementScale = () => {
+        let i = (prevState) => ++prevState
+        setCookie('scaleCookie', i(scale), {path: '/'})
         setScale((prevState) => ++prevState);
     }
 
@@ -113,6 +118,7 @@ export const AppConfig = (props) => {
     const changeTheme = (e, theme, scheme) => {
         props.onColorModeChange(scheme);
         setTheme(theme);
+        setCookie('themeCookie', theme, {path:'/'})
     }
 
     return (
@@ -124,7 +130,7 @@ export const AppConfig = (props) => {
                 <Button className="p-button-danger layout-config-close p-button-rounded p-button-text" icon="pi pi-times" onClick={hideConfigurator}/>
 
                 <div className="layout-config-content">
-                    <h5 className="mt-0">Component Scale</h5>
+                    <h5 className="mt-0">Tamaño Items</h5>
                     <div className="config-scale">
                         <Button icon="pi pi-minus" onClick={decrementScale} className="p-button-text" disabled={scale === scales[0]} />
                         {
@@ -135,129 +141,25 @@ export const AppConfig = (props) => {
                         <Button icon="pi pi-plus" onClick={incrementScale} className="p-button-text" disabled={scale === scales[scales.length - 1]} />
                     </div>
 
-                    <h5>Input Style</h5>
-                    <div className="p-formgroup-inline">
-                        <div className="field-radiobutton">
-                            <RadioButton inputId="input_outlined" name="inputstyle" value="outlined" onChange={(e) => props.onInputStyleChange(e.value)} checked={props.inputStyle === 'outlined'} />
-                            <label htmlFor="input_outlined">Outlined</label>
-                        </div>
-                        <div className="field-radiobutton">
-                            <RadioButton inputId="input_filled" name="inputstyle" value="filled" onChange={(e) => props.onInputStyleChange(e.value)} checked={props.inputStyle === 'filled'} />
-                            <label htmlFor="input_filled">Filled</label>
-                        </div>
-                    </div>
-
-                    <h5>Ripple Effect</h5>
-                    <InputSwitch checked={props.rippleEffect} onChange={props.onRippleEffect} />
-
-                    <h5>Menu Type</h5>
+                    <h5>Tipo Menu</h5>
                     <div className="p-formgroup-inline">
                         <div className="field-radiobutton">
                             <RadioButton inputId="static" name="layoutMode" value="static" onChange={(e) => props.onLayoutModeChange(e.value)} checked={props.layoutMode === 'static'} />
-                            <label htmlFor="static">Static</label>
+                            <label htmlFor="static">Estatico</label>
                         </div>
                         <div className="field-radiobutton">
                             <RadioButton inputId="overlay" name="layoutMode" value="overlay" onChange={(e) => props.onLayoutModeChange(e.value)} checked={props.layoutMode === 'overlay'} />
-                            <label htmlFor="overlay">Overlay</label>
+                            <label htmlFor="overlay">Oculto</label>
                         </div>
                     </div>
 
-                    <h5>Themes</h5>
-                    <h6 className="mt-0">Bootstrap</h6>
-                    <div className="grid free-themes">
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'bootstrap4-light-blue', 'light')}>
-                                <img src="assets/layout/images/themes/bootstrap4-light-blue.svg" alt="Bootstrap Light Blue"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'bootstrap4-light-purple', 'light')}>
-                                <img src="assets/layout/images/themes/bootstrap4-light-purple.svg" alt="Bootstrap Light Purple"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'bootstrap4-dark-blue', 'dark')}>
-                                <img src="assets/layout/images/themes/bootstrap4-dark-blue.svg" alt="Bootstrap Dark Blue"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'bootstrap4-dark-purple', 'dark')}>
-                                <img src="assets/layout/images/themes/bootstrap4-dark-purple.svg" alt="Bootstrap Dark Purple"/>
-                            </button>
-                        </div>
-                    </div>
-
-                    <h6>Material Design</h6>
-                    <div className="grid free-themes">
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'md-light-indigo', 'light')}>
-                                <img src="assets/layout/images/themes/md-light-indigo.svg" alt="Material Light Indigo"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'md-light-deeppurple', 'light')}>
-                                <img src="assets/layout/images/themes/md-light-deeppurple.svg" alt="Material Light DeepPurple"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'md-dark-indigo', 'dark')}>
-                                <img src="assets/layout/images/themes/md-dark-indigo.svg" alt="Material Dark Indigo"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'md-dark-deeppurple', 'dark')}>
-                                <img src="assets/layout/images/themes/md-dark-deeppurple.svg" alt="Material Dark DeepPurple"/>
-                            </button>
-                        </div>
-                    </div>
-
-                    <h6>Material Design Compact</h6>
-                    <div className="grid free-themes">
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'mdc-light-indigo', 'light')}>
-                                <img src="assets/layout/images/themes/md-light-indigo.svg" alt="Material Light Indigo"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'mdc-light-deeppurple', 'light')}>
-                                <img src="assets/layout/images/themes/md-light-deeppurple.svg" alt="Material Light DeepPurple"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'mdc-dark-indigo', 'dark')}>
-                                <img src="assets/layout/images/themes/md-dark-indigo.svg" alt="Material Dark Indigo"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'mdc-dark-deeppurple', 'dark')}>
-                                <img src="assets/layout/images/themes/md-dark-deeppurple.svg" alt="Material Dark DeepPurple"/>
-                            </button>
-                        </div>
-                    </div>
-
-                    <h6>Tailwind</h6>
-                    <div className="grid free-themes">
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'tailwind-light', 'light')}>
-                                <img src="assets/layout/images/themes/tailwind-light.png" alt="Tailwind Light"/>
-                            </button>
-                        </div>
-                    </div>
-
-                    <h6>Fluent UI</h6>
-                    <div className="grid free-themes">
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'fluent-light', 'light')}>
-                                <img src="assets/layout/images/themes/fluent-light.png" alt="Fluent Light"/>
-                            </button>
-                        </div>
-                    </div>
-
-                    <h6>PrimeOne Design - 2022</h6>
+                    <h5>Estilo Pagina</h5>
                     <div className="grid free-themes">
                         <div className="col-3 text-center">
                             <button className="p-link" onClick={(e) => changeTheme(e, 'lara-light-indigo', 'light')}>
-                                <img src="assets/layout/images/themes/lara-light-indigo.png" alt="Lara Light Indigo"/>
+                                <div className='p-1 pb-2' style={{background: "var(--bluegray-50)", borderRadius: "10px"}}>
+                                    <img src='images/logo-principal.svg' alt="Lara Light Indigo"/>
+                                </div>
                             </button>
                         </div>
                         <div className="col-3 text-center">
@@ -277,7 +179,9 @@ export const AppConfig = (props) => {
                         </div>
                         <div className="col-3 text-center">
                             <button className="p-link" onClick={(e) => changeTheme(e, 'lara-dark-indigo', 'dark')}>
-                                <img src="assets/layout/images/themes/lara-dark-indigo.png" alt="Lara Dark Indigo"/>
+                                <div className='p-1 pb-2' style={{background: "var(--bluegray-900)", borderRadius: "10px"}}>
+                                    <img src="images/logo-principal.svg" alt="Lara Dark Indigo"/>
+                                </div>
                             </button>
                         </div>
                         <div className="col-3 text-center">
@@ -296,71 +200,6 @@ export const AppConfig = (props) => {
                             </button>
                         </div>
                     </div>
-
-                    <h6>PrimeOne Design - 2021</h6>
-                    <div className="grid free-themes">
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'saga-blue', 'light')}>
-                                <img src="assets/layout/images/themes/saga-blue.png" alt="Saga Blue"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'saga-green', 'light')}>
-                                <img src="assets/layout/images/themes/saga-green.png" alt="Saga Green"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'saga-orange', 'light')}>
-                                <img src="assets/layout/images/themes/saga-orange.png" alt="Saga Orange"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'saga-purple', 'light')}>
-                                <img src="assets/layout/images/themes/saga-purple.png" alt="Saga Purple"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'vela-blue', 'dim')}>
-                                <img src="assets/layout/images/themes/vela-blue.png" alt="Vela Blue"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'vela-green', 'dim')}>
-                                <img src="assets/layout/images/themes/vela-green.png" alt="Vela Green"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'vela-orange', 'dim')}>
-                                <img src="assets/layout/images/themes/vela-orange.png" alt="Vela Orange"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'vela-purple', 'dim')}>
-                                <img src="assets/layout/images/themes/vela-purple.png" alt="Vela Purple"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'arya-blue', 'dark')}>
-                                <img src="assets/layout/images/themes/arya-blue.png" alt="Arya Blue"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'arya-green', 'dark')}>
-                                <img src="assets/layout/images/themes/arya-green.png" alt="Arya Green"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'arya-orange', 'dark')}>
-                                <img src="assets/layout/images/themes/arya-orange.png" alt="Arya Orange"/>
-                            </button>
-                        </div>
-                        <div className="col-3 text-center">
-                            <button className="p-link" onClick={e => changeTheme(e, 'arya-purple', 'dark')}>
-                                <img src="assets/layout/images/themes/arya-purple.png" alt="Arya Purple"/>
-                            </button>
-                        </div>
-                    </div>
-
                 </div>
             </Route>
         </div>

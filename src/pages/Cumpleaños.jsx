@@ -259,7 +259,7 @@ const Cumpleaños = () => {
         { label: 'cumpleaños', url: '/#/dash/cumpleaños' }
     ];
     
-    const home = { icon: 'pi pi-home', url: '/#/dash' }
+    const home = { icon: 'pi pi-briefcase', url: '/#/dash' }
     return (
     <div className='grid'>
         <Toast ref={toast} />
@@ -269,7 +269,7 @@ const Cumpleaños = () => {
                 <h4 className='inline-block my-0 '><IoBalloon className='text-pink-500'/>Cumpleaños<IoBalloon className='text-pink-500' /></h4>            
                 <i className='pi pi-info-circle text-purple-300 mx-3 text-2xl cursor-pointer icon-info-cumpleaños' onClick={e=>opInfo.current.toggle(e)}/>
             </div>
-            <BreadCrumb className='inline-block mx-4 p-0' style={{border:'none'}} model={items} home={home}/>
+            <BreadCrumb className='inline-block mx-4 p-1' style={{border:'none'}} model={items} home={home}/>
         </div>
 
         <Toolbar className="mb-4 col-12" left={leftToolbarTemplate} right={rightToolbarTemplate}/>

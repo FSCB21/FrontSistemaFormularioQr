@@ -20,6 +20,9 @@ import { Dialog } from 'primereact/dialog'
 import ReporteUsuarios from '../components/usuario/ReporteUsuarios'
 import LugarRegistro from '../components/usuario/LugarRegistro'
 import { BreadCrumb } from 'primereact/breadcrumb'
+import { confirmDialog } from 'primereact/confirmdialog';
+//icons
+import { FiTrash } from 'react-icons/fi'
 
 const Usuarios = () => {
 
@@ -233,6 +236,8 @@ const Usuarios = () => {
       }).catch(err=>{
         if(err.response.data.errors){
           toast.current.show({severity:'error', summary: `Error en campo: ${err.response.data.errors[0].param}`, detail: err.response.data.errors[0].msg, life: 3000});
+        }else{
+          toast.current.show({severity:'error', summary: `Fxa Te Informa`, detail: err.response.data, life: 3000});
         }
 
       })
@@ -332,7 +337,33 @@ const Usuarios = () => {
     { label: 'registros', url: '/#/dash/registros' }
   ];
 
-  const home = { icon: 'pi pi-home', url: '/#/dash' }
+  const home = { icon: 'pi pi-briefcase', url: '/#/dash' }
+
+  const usuarioService = new UsuarioService()
+  const deleteUser = id =>{
+    usuarioService.delete(id).then(res=>{
+        setLoadData(loadData+1)
+        toast.current.show({severity:'warn', summary: 'FXA Te Informa', detail: res.data, life: 3000});
+    }).catch(err=>{
+      toast.current.show({severity:'error', summary: `Fxa Te Informa`, detail: err.response.data, life: 3000});
+    })
+  }
+
+  const confirmDelete = (event, id) => {
+    confirmDialog({
+        header: 'Fxa Te Informa',
+        position:'bottom',
+        message: '¿Esta Seguro de borrar este registo?',
+        icon: 'pi pi-info-circle',
+        acceptLabel:'Seguro!',
+        acceptClassName: 'p-button-danger',
+        accept: ()=>deleteUser(id)
+    });
+  };
+
+  const botonBorrar = (id) =>{
+    return <FiTrash className='mr-2 cursor-pointer' onClick={e=>confirmDelete(e,id)}/>
+  }
   return (<>
 
       <div className='col-12 card grid justify-content-between align-items-center mb-4 ml-1'>
@@ -377,22 +408,28 @@ const Usuarios = () => {
               <Column sortable field="lugar_registro_fk"   body={e=>e.lugar_registro.nombre_lugar_registro} editor={(options) => selectEditor(options)} header="Lugar Registro"/>
               <Column sortable field="codigo_descuento.estado" body={estadoField} header="Estado Codigo"/>
               <Column rowEditor headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
+              <Column body={e=>botonBorrar(e.id_usuario)}/>
           </DataTable>
         </Card>
       }
       <OverlayPanel ref={op} onHide={deleteFilterData} dismissable style={{ width: '305px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)' }} breakpoints={{'640px': '90vw'}}>
         <SelectButton optionLabel="name" optionValue="code" value={filterOption} options={filterOptions} onChange={(e) => setFilterOption(e.value)}/>
-        <Dropdown value={fieldOption} className='w-full BorderFormNewUser' options={fieldOptions} onChange={e=>setFieldOption(e.value)} optionLabel="name" placeholder="Seleccione el campo" />
-        <InputText value={valueOption} placeholder='Escriba el valor' className='w-full' onChange={(e) => setValueOption(e.target.value)} />
-        <Button label='Filtrar' onClick={searchFiltered} className='w-full BorderFormNewUser' disabled={(filterOption&&fieldOption&&valueOption)?false:true}/>
+        <Dropdown value={fieldOption} className='w-full BorderFormNewUser my-3' options={fieldOptions} onChange={e=>setFieldOption(e.value)} optionLabel="name" placeholder="Seleccione el campo" />
+        {fieldOption !== 'lugar_registro_fk' && <>
+          <InputText value={valueOption} placeholder='Escriba el valor' className='w-full' onChange={(e) => setValueOption(e.target.value)} />
+        </>}
+        {fieldOption === 'lugar_registro_fk' && <>
+          <Dropdown placeholder='Seleccione el valor' className='w-full BorderFormNewUser' optionLabel='nombre_lugar_registro' optionValue='id_lugar_registro' options={lugaresRegistro} value={valueOption} onChange={e=>setValueOption(e.value)}/>
+        </>}
+        <Button label='Filtrar' onClick={searchFiltered} className='w-full BorderFormNewUser mt-3' disabled={(filterOption&&fieldOption&&valueOption)?false:true}/>
       </OverlayPanel>
       <OverlayPanel ref={opCalendar} onHide={deleteFilterData} dismissable style={{ width: '305px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)' }} breakpoints={{'640px': '90vw'}}>
         <Dropdown value={calendarOption} className='w-full BorderFormNewUser' options={calendarOptions} onChange={e=>setCalendarOption(e.value)} optionLabel="name" placeholder="Seleccione el campo" />
-        <Calendar placeholder='Fecha Inicio' className='w-full' dateFormat="dd/mm/yy" name="fecha_nacimiento" yearRange={`${today.getFullYear()-200}:${today.getFullYear()}`} id="fecha_nacimiento" value={fechaInicioValue} onChange={e=>setFechaInicioValue(e.value)}  monthNavigator yearNavigator style={{ borderRadius: "100%" }}
+        <Calendar placeholder='Fecha Inicio' className='w-full my-3' dateFormat="dd/mm/yy" name="fecha_nacimiento" yearRange={`${today.getFullYear()-200}:${today.getFullYear()}`} id="fecha_nacimiento" value={fechaInicioValue} onChange={e=>setFechaInicioValue(e.value)}  monthNavigator yearNavigator style={{ borderRadius: "100%" }}
           monthNavigatorTemplate={monthNavigatorTemplate} yearNavigatorTemplate={yearNavigatorTemplate} />
         <Calendar placeholder='Fecha Fin' className='w-full' dateFormat="dd/mm/yy" name="fecha_nacimiento" yearRange={`${today.getFullYear()-200}:${today.getFullYear()}`} id="fecha_nacimiento" value={fechaFinValue} onChange={e=>setFechaFinValue(e.value)}  monthNavigator yearNavigator style={{ borderRadius: "100%" }}
           monthNavigatorTemplate={monthNavigatorTemplate} yearNavigatorTemplate={yearNavigatorTemplate} />
-        <Button label='Filtrar' onClick={CalendarFiltered} className='w-full BorderFormNewUser' disabled={(calendarOption&&fechaInicioValue&&fechaFinValue)?false:true}/>
+        <Button label='Filtrar' onClick={CalendarFiltered} className='w-full BorderFormNewUser mt-3' disabled={(calendarOption&&fechaInicioValue&&fechaFinValue)?false:true}/>
       </OverlayPanel>
 
       <Dialog header="Generar Reporte" visible={displayGenerarReporte} className="w-11 md:w-8 xl:w-5" onHide={() => setDisplayGenerarReporte(false)}>

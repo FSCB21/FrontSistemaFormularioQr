@@ -23,13 +23,17 @@ import FormNewUser from './pages/FormNewUser';
 import LoginPage from './pages/LoginPage';
 import Usuarios from './pages/Usuarios';
 
+import { useCookies } from 'react-cookie';
+
 import menu from './MenuConten'
 import Dashboard from './pages/Dashboard';
 import Cumpleaños from './pages/Cumpleaños';
 
 const App = () => {
-    const [layoutMode, setLayoutMode] = useState('static');
-    const [layoutColorMode, setLayoutColorMode] = useState('light')
+    const [cookies, setCookie] = useCookies(['layautModeCookie', 'layautColorModeCookie']);
+
+    const [layoutMode, setLayoutMode] = useState(cookies.layautModeCookie?cookies.layautModeCookie:'static');
+    const [layoutColorMode, setLayoutColorMode] = useState(cookies.layautColorModeCookie?cookies.layautColorModeCookie:'light')
     const [inputStyle, setInputStyle] = useState('outlined');
     const [ripple, setRipple] = useState(true);
     const [staticMenuInactive, setStaticMenuInactive] = useState(false);
@@ -67,10 +71,12 @@ const App = () => {
 
     const onLayoutModeChange = (mode) => {
         setLayoutMode(mode)
+        setCookie('layautModeCookie', mode, {path:'/'})
     }
 
     const onColorModeChange = (mode) => {
         setLayoutColorMode(mode)
+        setCookie('layautColorModeCookie', mode, {path:'/'})
     }
 
     const onWrapperClick = (event) => {

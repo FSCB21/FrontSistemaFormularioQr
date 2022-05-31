@@ -79,7 +79,6 @@ const Graficas = (params) => {
                 }
             });
         });
-        console.log(lugares)
         setGraficData(lugares, setDataLugaresRegistro)
     }
 

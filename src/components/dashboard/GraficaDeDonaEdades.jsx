@@ -19,7 +19,7 @@ const GraficaDeDonaEdades = () => {
     const setColors = () =>{
         let i = []
 
-        for (let index = 0; index <= 150; index++) {
+        for (let index = 0; index <= 50; index++) {
             i.push(GenerateRandom(0,100))
         }
         setArreloNumerosColores(i)

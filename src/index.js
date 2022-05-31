@@ -7,6 +7,8 @@ import { HashRouter } from 'react-router-dom'
 import ScrollToTop from './ScrollToTop';
 import { addLocale, locale } from 'primereact/api';
 
+import { CookiesProvider } from 'react-cookie';
+
 import './service/AxiosConfig'
 
 addLocale('es', {
@@ -23,9 +25,11 @@ locale('es');
 
 ReactDOM.render(
     <HashRouter>
-        <ScrollToTop>
-            <App/>
-        </ScrollToTop>
+        <CookiesProvider>
+            <ScrollToTop>
+                <App/>
+            </ScrollToTop>
+        </CookiesProvider>
     </HashRouter>,
     document.getElementById('root')
 );

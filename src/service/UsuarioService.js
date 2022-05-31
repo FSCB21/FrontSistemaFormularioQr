@@ -20,6 +20,9 @@ class UsuarioService  {
         return axios.put(`${API}/update?id_usuario=${data.id_usuario}`,data)
     }
 
+    delete(id){
+        return axios.delete(`${API}/delete?id_usuario=${id}`)
+    }
 }
 
 export default UsuarioService
