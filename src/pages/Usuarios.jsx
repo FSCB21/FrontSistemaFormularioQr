@@ -399,6 +399,7 @@ const Usuarios = () => {
           
           <DataTable value={usuarios} responsiveLayout="scroll" size="small" emptyMessage='Ups... No se encontro un registro para mostrar 😧'
             editMode="row" dataKey="id" onRowEditComplete={onRowEditComplete}>
+              <Column sortable field="createdAt" header="Fecha Registro"/>
               <Column sortable field="nombres" editor={(options) => textEditor(options)} header="Nombres"/>
               <Column sortable field="apellidos" editor={(options) => textEditor(options)} header="Apellidos"/>
               <Column sortable field="numero_doc" editor={(options) => textEditor(options)} header="Identificación"/>
