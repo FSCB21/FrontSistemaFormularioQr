@@ -14,7 +14,21 @@
 }
 
 .bodyForm{
-    background: #ffa8bc;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.bodyForm-image-1{
+  background-image: url('/images/Fondos/Fondo2.jpg');
+}
+.bodyForm-image-2{
+  background-image: url('/images/Fondos/Fondo4.jpg');
+}
+.bodyForm-image-3{
+  background-image: url('/images/Fondos/Fondo3.jpg');
+}
+.bodyForm-image-4{
+  background-image: url('/images/Fondos/Fondo5.jpg');
 }
 
 .cardForm{

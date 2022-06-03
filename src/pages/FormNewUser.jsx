@@ -103,9 +103,8 @@ const FormNewUser = () => {
         })
     }
     
-
     return (
-        <div className='relative w-full justify-content-center align-items-center flex bodyForm'>
+        <div className={'relative w-full justify-content-center align-items-center flex bodyForm bodyForm-image-4'}>
             <Toast ref={toast} />
             {loading && <div className='relative h-screen w-full justify-content-center align-items-center flex'>
                 <LoadPage/>

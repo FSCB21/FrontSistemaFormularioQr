@@ -5,8 +5,10 @@ import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { Toast } from 'primereact/toast'
 import React, { useRef, useEffect, useState } from 'react'
+import { useCookies } from 'react-cookie'
 import { useHistory } from 'react-router-dom'
 import LoadPage from '../components/LoadPage'
+import GenerateRandom from '../helpers/GenerateRandom'
 import CredencialService from '../service/CredencialService'
 import validationLogin from '../validations/validationLogin'
 
@@ -51,6 +53,25 @@ const LoginPage = () => {
         return isFormFieldValid(name) && <small className="p-error mb-2 block">{formik.errors[name]}</small>;
     };
 
+    
+    const [cookies, setCookie] = useCookies(['imgFormCookie']);
+    const [bodyForm, setBodyForm] = useState(`bodyForm-image-${cookies.imgFormCookie?cookies.imgFormCookie:5}`)
+
+    useEffect(() => {
+        let i = cookies.imgFormCookie?parseInt(cookies.imgFormCookie):1
+
+        
+        let a = 1
+        do {
+            a = GenerateRandom(1,5)
+        } while (i===a);
+
+        setBodyForm(`bodyForm-image-${a}`)
+        setCookie('imgFormCookie',a)
+        return () => {
+        };
+    }, []);//eslint-disable-line
+
   return (<>
     <Toast ref={toast} />
     {loading && 
@@ -59,8 +80,8 @@ const LoginPage = () => {
         </div>
     }
     {!loading &&
-        <div className='flex w-full h-screen justify-content-center align-items-center'>
-            <div className="surface-card p-4 shadow-2 border-round w-10 sm:w-8 md:w-6 lg:w-4">
+        <div className={'flex w-full h-screen justify-content-center align-items-center bodyForm '+bodyForm}>
+            <div className="surface-card p-4 shadow-2 border-round w-10 sm:w-8 md:w-6 lg:w-4" style={{opacity:'0.9'}}>
         
                 <div className="text-center mb-5">
                     <img src="images/logo-principal.svg" alt="hyper" height="50" className="mb-3" />
