@@ -8,7 +8,7 @@ const Terms = () => {
         <Accordion className="accordion-custom" activeIndex={0}>
                 <AccordionTab header={<React.Fragment><i className="pi pi-phone"></i><span className='text-xs'> Envío De Mensajes</span></React.Fragment>}>
                     <p className='text-xs'>
-                        Al enviar el siguiente formulario acepta que FXA envie mensajes via sms informando de promociones, descuentos y otra información que será suministrada unica y exclusivamente por FXA.
+                        Al enviar el siguiente formulario acepta que FXA envie mensajes via sms o email informando de promociones, descuentos y otra información que será suministrada unica y exclusivamente por FXA.
                     </p>
                 </AccordionTab>
                 <AccordionTab header={<React.Fragment><i className="pi pi-copy"></i><span className='text-xs'> Uso De La Información Personal</span></React.Fragment>}>
@@ -49,6 +49,7 @@ const Terms = () => {
                 <AccordionTab header={<React.Fragment><i className="pi pi-search"></i><span className='text-xs'> Términos Y Condiciones De Uso</span></React.Fragment>}>
                     <p className='text-xs'>
                         Al acceder, hojear y/o usar este Sitio Web, el usuario admite haber leído y entendido estos Términos de Uso y estar de acuerdo en sujetarse a los mismos y cumplir con todas las leyes y reglamentos aplicables que hagan parte de la Legislación Colombiana. Además, cuando el usuario utilice cualquier servicio suministrado en este Sitio Web, estará sujeto a las reglas, guías, políticas, términos y condiciones aplicables a dicho servicio en particular. FXA  no se responsabiliza de que el material en este Sitio Web sea apropiado o esté disponible para su uso en otros lugares, estando prohibido su acceso desde territorios donde su contenido sea ilegal. Aquellos que decidan acceder a este Sitio Web desde otros lugares lo harán bajo su propia iniciativa y es su responsabilidad el sujetarse a las leyes locales que sean aplicables. En caso de que el usuario no esté de acuerdo con estos términos, favor abstenerse de usar este Sitio Web. Cualquier reclamo con relación a este Sitio Web y el material en él contenido está regulado por las leyes de Colombia. Estos términos y condiciones están sujetos a cambios sin previo aviso en cualquier momento, bajo el principio de autonomía de la voluntad de FXA  y a partir de la fecha de modificación de estos términos y condiciones, todas las operaciones que se celebren entre FXA  y el usuario se regirán por el documento modificado, lo cual acepta desde ya el Usuario y/o Cliente.
+                        <a href="https://www.fxa.com.co/8209-2/" target='_blank'> ver mas.</a>
                     </p>
                 </AccordionTab>
             </Accordion>
