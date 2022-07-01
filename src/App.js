@@ -3,15 +3,13 @@
 //Importamos react para que se sepa que es un componente
 //Importamos el gancho de useEffect para que se ejecute una determinada linea de codigo cada que se renderiza el componente
 //Importamos el gancho de useState para inicializar un valor y que este sea cambiado en directo dependiendo la accion del usuario
-//Importamos el gancho de useRef para crear una referencia a un respectivo modulo del componente
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 //Importamos clasnames para el mejor uso de clases en los componentes
 import classNames from 'classnames';
 
 //De router-dom importamos Route para que segun la ruta muestre un determinado grupo de componentes
-//Tambien importamos useLocation para poder analizar la ruta de la pagina 
-import { Route, useLocation } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 //Importamos el siguiente componente que nos permite animar un componente
 import { CSSTransition } from 'react-transition-group';

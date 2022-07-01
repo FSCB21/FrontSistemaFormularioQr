@@ -57,12 +57,12 @@ const DialogCodeSend = (params) => {
             <h5>El Código ha sido enviado</h5>
             <p>Se ha enviado el código de descuento al teléfono celular que aparece a continuación, si no te ha llegado el código puedes probar reenviarlo el boton se activa en un minuto.</p>
             {<PhoneInput
-                international
                 className={"BorderFormNewUser mt-2 p-inputtext p-component"}
                 disabled
                 defaultCountry="CO"
                 value={newPhone}
                 onChange={setNumero2}
+                countries={['CO']}
                 />}
             <div className="w-full justify-content-center align-items-center grid">
                 <Button type="button" onClick={()=>setStatePhoneInput(false)} label="Ese no es mi número" className='BorderFormNewUser p-button-link text-blue-700 mt-4'/>
@@ -74,9 +74,9 @@ const DialogCodeSend = (params) => {
             <h5>Cambiar Número De Teléfono</h5>
             <p>Cambia tu número de telefono en la siguiente sección, una vez realices el cambio da clic en "Reenviar Código".</p>
             {<PhoneInput
-                international
                 className={"BorderFormNewUser mt-2 p-inputtext p-component"}
                 defaultCountry="CO"
+                countries={['CO']}
                 value={newPhone}
                 onChange={setNumero2}
                 />}

@@ -10,7 +10,12 @@
 }
 
 .p-inputtext{
-    border-radius: 30px !important;
+    border-radius: 30px ;
+}
+
+.mail-container{
+ margin: 0 !important;
+ padding: 0 !important;
 }
 
 .bodyForm{
