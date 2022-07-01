@@ -231,7 +231,7 @@ const FormNewUser = () => {
 
                         <div className="field-checkbox col-12 mt-3">
                             <Checkbox inputId="accept" name="accept" checked={formik.values.accept} onChange={formik.handleChange} className={classNames({ 'p-invalid': isFormFieldValid('accept') })} />
-                            <label htmlFor="accept" className={classNames({ 'p-error': isFormFieldValid('accept') })}>Acepto los <span className='p-link text-blue-500' onClick={()=>setDisplayBasic(true)}>terminos y condiciones</span> de uso del sistema, así como sus politicas de manejo de datos.*</label>
+                            <label htmlFor="accept" className={"text-sm "+classNames({ 'p-error': isFormFieldValid('accept') })}>Acepto los <span className='p-link text-blue-500' onClick={()=>setDisplayBasic(true)}>terminos y condiciones</span> de uso del sistema, así como sus politicas de manejo de datos.*</label>
                         </div>
                         <div className="field-checkbox col-12 mt-3">
                             <Checkbox inputId="accept2" name="accept2" checked={formik.values.accept2} onChange={formik.handleChange} className={classNames({ 'p-invalid': isFormFieldValid('accept2') })} />
