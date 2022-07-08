@@ -1,48 +1,117 @@
+/* Archivo que almacena el contenido principal del modulo de Formulario nuevo registro */
+
+//Importamos react para definir que lo que se encuentra en este archivo es un componente de react
+//Importamos los ganchos de react que se van a usar en el archivo
+//Importamos useEffect como el gancho que ejecuta un determinado grupo de lineas de codigo cada que se renderiza el componente
+//Importamos useState como el gancho que almacena variables de estado que cambian de manera dinamica en el codigo
+//Importamos useRef para crear una referencia a determinados elementos del archivo
 import React, {useEffect, useState, useRef} from 'react'
 
-import { Toolbar } from 'primereact/toolbar';
+//Importamos Button de primereact
+//Este elemento es un boton el cual se le pueden asignar estilos de manera rapida
 import { Button } from 'primereact/button';
-import CumpleañosService from '../service/CumpleañosService'
-import RetornarNombreMes from '../helpers/RetornarNombreMes'
+//Importamos el objeto Calendar de primereact
+//Este elemento es un estilo de input para calendario y selecion de fechas 
 import { Calendar } from 'primereact/calendar';
+//Importamos el objetoOverlayPanel
+//Este objeto es una ventana pequeña que emerge de la seccion a la cual se le da clic
 import { OverlayPanel } from 'primereact/overlaypanel';
+//Importamos el objeto Dropdow de prime react
+//Este elemento permite elegir entre varias opciones de valres establecidas en el item de optios
 import { Dropdown } from 'primereact/dropdown';
+//Importamos el elemento Toast de primereact
+//Este elemento es una alerta que aparece en la pantalla 
 import { Toast } from 'primereact/toast';
-import { ScrollPanel  } from 'primereact/scrollpanel';
-import { Slider } from 'primereact/slider';
-import { MultiSelect } from 'primereact/multiselect';
+//Importamos el selectButton de primereact
+//Este elemento es un boton el cual se le puede cambiar el valor que tiene activado por otro
 import { SelectButton } from 'primereact/selectbutton';
+//Importamos el componente de MultiSelect de primereact
+//Este componente permite elejir varios elementos de un selector desplegable
+import { MultiSelect } from 'primereact/multiselect';
+//Importamos el elemento de Slider de primereact
+//Este elemento es un estilado de input que permite deslizar una barra para elejir un valor
+import { Slider } from 'primereact/slider';
+//Importamos el elemento BreadCrumb de primereact
+//Este elemento es el estilado del menu de miga de pan
 import { BreadCrumb } from 'primereact/breadcrumb';
+//Importamos el elemento de ScrollPanel de primereact
+//Este objeto permite crear un componente con un scroll interno
+import { ScrollPanel  } from 'primereact/scrollpanel';
+//Importamos el item Toolbar de primereact
+//Este item es un estilo de barra/menu superior que organiza el contenido del header de la seccion
+import { Toolbar } from 'primereact/toolbar';
 
-import LoadPage from '../components/LoadPage'
-import { isEmptyArray } from 'formik';
+//Importamos la clase de servicio de usuarios, la cual contiene todos los metodos de gestion de la informacion de consulta al api
+import CumpleañosService from '../service/CumpleañosService'
 
-import '../components/cumpleaños/cumpleaños.css'
-import Info from '../components/cumpleaños/Info';
-import Graficas from '../components/cumpleaños/Graficas';
-import InfoFilter from '../components/cumpleaños/InfoFilter';
-import ColoresGraficas from '../components/cumpleaños/ColoresGraficas';
+//Importamos el helper que segun el número de mes retornara el nombre
+import RetornarNombreMes from '../helpers/RetornarNombreMes'
+//Importamos el helper que genera un numero aleatorio segun se especifique en los parametros
 import GenerateRandom from '../helpers/GenerateRandom';
 
+//Importamos el componente de ventana de carga
+import LoadPage from '../components/LoadPage'
+//Importamosel componente de informacion de uso de la seccion de cumpleaños
+import Info from '../components/cumpleaños/Info';
+//Importamos el componente de graficas de cumpleaños
+import Graficas from '../components/cumpleaños/Graficas';
+//Importamos el componente de mas informacion de uso, pero en este caso de filtros
+import InfoFilter from '../components/cumpleaños/InfoFilter';
+//Importamos el arreglo de colores(se creo para evitar colores fuertes o sin sentido al momento de asignar un color aleatorio a los registros de las graficas)
+import ColoresGraficas from '../components/cumpleaños/ColoresGraficas';
+
+//Importamos un metodo validador, el cual valida si un arreglo esta vacio
+import { isEmptyArray } from 'formik';
+
+//Importamos las clases de estilo del componente de cumpleaños
+import '../components/cumpleaños/cumpleaños.css'
+
 //icons
+//Importamos el icono de globo de react-icons
 import { IoBalloon } from 'react-icons/io5';
 
+//Componente de retorno de la pagina de cumpleaños
 const Cumpleaños = () => {
+
+    //Se define una constante que tendra la referemcia a la etiqueta del overlay panel
     const op = useRef(null);
+    //Se define una constante que tendra la referemcia a la etiqueta del overlay panel pero en este caso de mas informacion
     const opInfo = useRef(null);
+    //Se define una constante que tendra la referemcia a la etiqueta del overlay panel pero en este caso de mas informacion en el filtro
     const opInfoFilter = useRef(null);
+    //Se define una constante que tendra la referemcia a la etiqueta del overlay panel de filtro
     const opFilter = useRef(null);
+    //Se define una constante que tendra la referencia a la etiqueta de toast
     const toast = useRef(null);
 
+    //Se define una variable que contiene la fecha actual mediante el metodo de new Date()
     let hoy = new Date()
     
+    //Gancho que almacena la fecha en la que se van a consultar los usuarios que estan cumpliendo años, de inicio se define el día actual
     const [fechaCumpleaños, setFechaCumpleaños] = useState([`${hoy.getFullYear()}-${hoy.getMonth()+1}-${hoy.getDate()}`])
+    //Gancho que almacena la informacion de las personas que cumplen años segun la fecha establecida
     const [dataCumpleaños, setDataCumpleaños] = useState([])
+    //Creamos un gancho de estado para la ventana de carga, por defecto este gancho tiene un valor de false
     const [loading, setLoading] = useState(false)
-    
+    //Gancho que es usado para renderizar el componente de manera manual cuando este cambie, su valor inicial es 0 y para cada vez que se requiera renderizar sera incrementar en +1 este valor
     const [reload, setReload] = useState(0)
-
+    //Gancho que almacena el orden de colores que se cargan al momento de renderizar el componente (esto para evitar que la grafica cambie de color sin recargar informacion)
     const [arregloNumerosColores, setArreloNumerosColores] = useState([])
+    //Gancho que almacena el valor del calendario de cambiar fecha de visualizacion de las personas que cumplen años
+    const [dates2, setdates2] = useState([])
+    //Gancho que almacena el valor del estado del boton de filtro, esto para cambiar el estilo del boton en el momento que se ha filtrado la informacion
+    const [filterIcon, setFilterIcon] = useState(false)
+    //Gancho que almacena el valor de la opcion de filtrado que se quiere realizar
+    const [ optionFilter, setOptionFilter] = useState(null)
+    //Gancho que almacena el valor de consulta para el filtro por edad
+    const [ edadValue, setEdadValue] = useState([0,200])
+    //Gancho que almacena el limite posible de edades para el filtro por edad
+    const [ edadLimits, setEdadLimits] = useState([0,200])
+    const [lugaresRegistroOptions, setLugaresRegistroOptions] = useState([])
+    const [lugaresSeleccionados, setLugaresSeleccionados] = useState([])
+    const [ orderValue, setOrderValue ] = useState('')
+    const [valueOrdenarSelect, setValueOrdenarSelect] = useState(null)
+
 
     const setColors = () =>{
         let i = []
@@ -151,16 +220,7 @@ const Cumpleaños = () => {
         }).finally(()=>setLoading(false))
     }
 
-    const [dates2, setdates2] = useState([])
-
-
-    //Segundo Filtro
-    const [filterIcon, setFilterIcon] = useState(false)
-    const [ optionFilter, setOptionFilter] = useState(null)
-
-    //Edad
-    const [ edadValue, setEdadValue] = useState([0,200])
-    const [ edadLimits, setEdadLimits] = useState([0,200])
+    
 
     const calcularMinimoMaximoEdad = (data) =>{
         let min = 200
@@ -190,9 +250,6 @@ const Cumpleaños = () => {
 
     //Obtener lugares de registro
 
-    const [lugaresRegistroOptions, setLugaresRegistroOptions] = useState([])
-    const [lugaresSeleccionados, setLugaresSeleccionados] = useState([])
-
     const obtenerLugaresRegistro = (data) =>{
         let lugares = []
         data.forEach(el => {
@@ -219,8 +276,6 @@ const Cumpleaños = () => {
     }
 
     //Cambiar orden
-    const [ orderValue, setOrderValue ] = useState('')
-    const [valueOrdenarSelect, setValueOrdenarSelect] = useState(null)
 
     const orderOptions = [
         {name: 'Ascendente', value: 1},
@@ -381,4 +436,5 @@ const Cumpleaños = () => {
   )
 }
 
+//Exportamos el componente para usarlo en la seccion de App.js
 export default Cumpleaños

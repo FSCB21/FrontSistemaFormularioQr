@@ -37,16 +37,16 @@ const validationRegUser = (data) =>{
         errors.apellidos = 'Los Apellidos no pueden pasar de 30 caracteres ni ser inferiores a 2 caracteres.';
 
     //Si el campo de correo electronico no tiene ningun valor
-    if (!data.correo_electronico) 
+    if (!data.correo_el) 
         //Enviara mensaje de que el correo es obligatorio
-        errors.correo_electronico = 'El Correo Electronico Es Obligatorio.';
+        errors.correo_el = 'El Correo Electronico Es Obligatorio.';
     //Si el campo de correo electronico tiene un "@"
-    else if (data.correo_electronico.includes('@')) 
+    else if (data.correo_el.includes('@')) 
         //Va a enviar mensaje de que no es necesario poner el @
-        errors.correo_electronico = 'No es necesario poner "@".';
-    else if (!/^[A-Z0-9._%+-]+$/i.test(data.correo_electronico)) 
+        errors.correo_el = 'No es necesario poner "@".';
+    else if (!/^[A-Z0-9._%+-]+$/i.test(data.correo_el)) 
         //Se validan los caracteres del correo para que cumpla con las condiciones basicas de este
-        errors.correo_electronico = 'Direccion de correo electronico invalida.';
+        errors.correo_el = 'Direccion de correo electronico invalida.';
     
     //Valida que exista un valor para el dominio del correo
     if (!data.dominio_correo) 

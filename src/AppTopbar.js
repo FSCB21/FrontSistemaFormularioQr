@@ -32,7 +32,7 @@ import ConfigCredentials from './components/topBar/ConfigCredentials';
 export const AppTopbar = (props) => {
 
     //definimos history como un nuevo objeto de useHistory
-    //history tiene varios metodos hutiles como el pusheo a la ruta, el cual es el metodo por el cual importamos history
+    //history tiene varios metodos utiles como el pusheo a la ruta, el cual es el metodo por el cual importamos history
     const history = new useHistory()
 
     //Con la ayuda de use state creamos un gancho, el cual nos sirve para mostrar cambios de informacion instantanea.
