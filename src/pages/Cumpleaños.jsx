@@ -107,6 +107,7 @@ const Cumpleaños = () => {
     const [ edadValue, setEdadValue] = useState([0,200])
     //Gancho que almacena el limite posible de edades para el filtro por edad
     const [ edadLimits, setEdadLimits] = useState([0,200])
+    //
     const [lugaresRegistroOptions, setLugaresRegistroOptions] = useState([])
     const [lugaresSeleccionados, setLugaresSeleccionados] = useState([])
     const [ orderValue, setOrderValue ] = useState('')
