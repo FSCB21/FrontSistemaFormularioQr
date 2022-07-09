@@ -5,6 +5,7 @@
 //Importamos el gancho de useState para inicializar un valor y que este sea cambiado en directo dependiendo la accion del usuario
 import React, { useState, useEffect } from 'react';
 
+
 //Importamos clasnames para el mejor uso de clases en los componentes
 import classNames from 'classnames';
 
@@ -82,10 +83,10 @@ const App = () => {
     const [cookies, setCookie] = useCookies(['layautModeCookie', 'layautColorModeCookie']);
 
     //Definimos un gancho de estado como el modo de menu, decimos que si hay un modo definido en las galletas use ese modo, en caso de que no este definido use por defecto el valor de static
-    const [layoutMode, setLayoutMode] = useState(cookies.layautModeCookie?cookies.layautModeCookie:'static');
+    const [layoutMode, setLayoutMode] = useState(cookies.layautModeCookie ? cookies.layautModeCookie : 'static');
 
     //Definimos un gancho que contendra el color del fondo, se envia como argumento si esta definida la cookie con el mismo nombre, en caso de que esta no este definida enviara por defecto "light"
-    const [layoutColorMode, setLayoutColorMode] = useState(cookies.layautColorModeCookie?cookies.layautColorModeCookie:'light')
+    const [layoutColorMode, setLayoutColorMode] = useState(cookies.layautColorModeCookie ? cookies.layautColorModeCookie : 'light')
 
     //Creamos el gancho donde definimos el estilo del input, pasamos como valor inicial "outlined"
     const [inputStyle, setInputStyle] = useState('outlined');
@@ -141,7 +142,7 @@ const App = () => {
         //Va a cambiar el valor del gancho de estado segun el parametro que sera enviado
         setLayoutMode(mode)
         //Establece la cookie para que almacene la opcion de estilado que configure el usuario
-        setCookie('layautModeCookie', mode, {path:'/'})
+        setCookie('layautModeCookie', mode, { path: '/' })
     }
 
     //Funcion que se encambia el color de fondo en el aplicativo, solicita como parametros el mode
@@ -149,7 +150,7 @@ const App = () => {
         //Cambia el valor del gancho de estado segun el parametro solicitado en la funcion
         setLayoutColorMode(mode)
         //Establece una cookie que almacenara este valor para todas las rutas
-        setCookie('layautColorModeCookie', mode, {path:'/'})
+        setCookie('layautColorModeCookie', mode, { path: '/' })
     }
 
     //Funcion que detecta cuando se da un clic afuera del menu//en el contenedor del sistema
@@ -295,9 +296,9 @@ const App = () => {
 
             {/* Etiqueta Route que muestra un determinado contenido dependiendo la ruta de la url */}
             {/* Cuando la ruta sea exactamente '/' va a renderizar el componente FormNewUser */}
-            <Route exact path="/"><FormNewUser/></Route>
+            <Route exact path="/"><FormNewUser /></Route>
             {/* Cuando la ruta sea exactamente '/login' va a renderizar la pagina LoginPage */}
-            <Route path="/login"><LoginPage/></Route>
+            <Route path="/login"><LoginPage /></Route>
             {/* Cuando la ruta sea '/dash' va a renderizar las siguientes etiquetas */}
             <Route path="/dash">
                 {/* Va a renderizar el topBar de la aplicacion */}
@@ -320,11 +321,11 @@ const App = () => {
                         {/* Segun la ruta va a renderizar los siguientes componentes */}
 
                         {/* Si la ruta es exactamente "/dash/" va arenderizar el componente de dashboard y va a pasar el color por las propiedades*/}
-                        <Route path="/dash/" exact render={() => <Dashboard  colorMode={layoutColorMode}/>} />
+                        <Route path="/dash/" exact render={() => <Dashboard colorMode={layoutColorMode} />} />
                         {/* Si la ruta es exactamente "/dash/registros/" va a renderizar el componente de Usuarios */}
-                        <Route path="/dash/registros/" exact ><Usuarios/></Route>
+                        <Route path="/dash/registros/" exact ><Usuarios /></Route>
                         {/* Si la ruta es exactamente igual a "/dash/cumpleaños" va a reenderizar el componente de cumpleños */}
-                        <Route path="/dash/cumpleaños" exact ><Cumpleaños/></Route>
+                        <Route path="/dash/cumpleaños" exact ><Cumpleaños /></Route>
                     </div>
 
                     {/* Se llama el componente de Footer y se le pasa el color por los parametros */}
