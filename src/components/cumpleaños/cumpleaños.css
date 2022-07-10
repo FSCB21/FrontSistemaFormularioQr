@@ -1,16 +1,23 @@
+/* Estilos para la seccion de cumpleaños */
 
-.cumpleaños-card:hover{
+/* Creacion de estilos de animacion para el momento en el que se pase el cursor por encima del componente*/
+.cumpleaños-card:hover {
     transform: scale(110%);
     cursor: pointer;
 }
-.cumpleaños-card{
+
+/*Funcion para que el componente realice la animacion en determinados segundos*/
+.cumpleaños-card {
     transition: .8s;
 }
 
-.icon-info-cumpleaños{
+/*Funcion para que el componente realice la animacion en determinados segundos*/
+.icon-info-cumpleaños {
     transition: 1s;
 }
-.icon-info-cumpleaños:hover{
+
+/*Funcion para que el componente realice un cambio de estilos al pasar el cursor por encima*/
+.icon-info-cumpleaños:hover {
     color: rgb(155, 33, 118);
     transform: scale(110%);
 }

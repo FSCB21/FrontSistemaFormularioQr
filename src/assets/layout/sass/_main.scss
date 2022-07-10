@@ -1,3 +1,4 @@
+/*Estilos de base- Plantilla*/
 * {
     box-sizing: border-box;
 }
@@ -18,7 +19,8 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-a, button {
+a,
+button {
     text-decoration: none;
     color: var(--primary-color);
 }

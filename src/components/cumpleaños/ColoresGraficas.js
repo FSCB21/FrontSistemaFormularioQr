@@ -1,3 +1,6 @@
+/*Este archivo se realizo con fin de guardar variedad de colores a usar */
+
+//Arreglo para definir colores Pastel(Diseño)
 export default [
     '#B2B7F6',
     '#B2F6F0',

@@ -1,14 +1,32 @@
+/* Archivo de la plantilla que contiene la configuracion del menu lateral derecho */
+
+//Importamos el componente de react y su gancho de use state
 import React, { useState } from 'react';
+
+//Importamos el componente de navlink para realizar la redireccion
 import { NavLink } from 'react-router-dom';
+
+//Importamos las animaciones
 import { CSSTransition } from 'react-transition-group';
+
+//Importamos el metodo de classnames para el manejo de clases
 import classNames from 'classnames';
-import {Ripple} from "primereact/ripple";
+
+//Importamos componentes de estilo de primereact
+import { Ripple } from "primereact/ripple";
 import { Badge } from 'primereact/badge';
 
+//Declaramos la funcion de retorno del componente
 const AppSubmenu = (props) => {
 
+    //Definimos los ganchos de estado
     const [activeIndex, setActiveIndex] = useState(null)
 
+    /**
+     * Funcion que ejecutara la redirecccion de la pagina segun el item al cual se le da click
+     * 
+     * Para esto se le pasa en los parametros el elemento y sus atributos
+     */
     const onMenuItemClick = (event, item, index) => {
         //avoid processing disabled items
         if (item.disabled) {
@@ -34,13 +52,17 @@ const AppSubmenu = (props) => {
         }
     }
 
+    //Metodo que va a detectar el momento en el cual se preccione una tecla del teclado
+    //Pero en este caso del menu, asi que dicce que en el momento de dar enter en el item se reslice la redireccion 
     const onKeyDown = (event) => {
-        if (event.code === 'Enter' || event.code === 'Space'){
+        if (event.code === 'Enter' || event.code === 'Space') {
             event.preventDefault();
             event.target.click();
         }
     }
 
+    //Funciones que renderizan el contenido del menu para cada elemento
+    //Recibe el elemento y lo renderiza con su respectivo estilado
     const renderLinkContent = (item) => {
         let submenuIcon = item.items && <i className="pi pi-fw pi-angle-down menuitem-toggle-icon"></i>;
         let badge = item.badge && <Badge value={item.badge} />
@@ -51,11 +73,10 @@ const AppSubmenu = (props) => {
                 <span>{item.label}</span>
                 {submenuIcon}
                 {badge}
-                <Ripple/>
+                <Ripple />
             </React.Fragment>
         );
     }
-
     const renderLink = (item, i) => {
         let content = renderLinkContent(item);
 
@@ -75,11 +96,12 @@ const AppSubmenu = (props) => {
         }
     }
 
+    //Se define una varaible que contendra el mapeo de los items para dw esta manera darle la estructura de menu
     let items = props.items && props.items.map((item, i) => {
         let active = activeIndex === i;
-        let styleClass = classNames(item.badgeStyleClass, {'layout-menuitem-category': props.root, 'active-menuitem': active && !item.to });
+        let styleClass = classNames(item.badgeStyleClass, { 'layout-menuitem-category': props.root, 'active-menuitem': active && !item.to });
 
-        if(props.root) {
+        if (props.root) {
             return (
                 <li className={styleClass} key={i} role="none">
                     {props.root === true && <React.Fragment>
@@ -104,11 +126,12 @@ const AppSubmenu = (props) => {
     return items ? <ul className={props.className} role="menu">{items}</ul> : null;
 }
 
+//Exportamos el componente donde se va a renderizar el menu con los items que se pasan como parametros
 export const AppMenu = (props) => {
 
     return (
         <div className="layout-menu-container">
-            <AppSubmenu items={props.model} className="layout-menu"  onMenuItemClick={props.onMenuItemClick} root={true} role="menu" />
+            <AppSubmenu items={props.model} className="layout-menu" onMenuItemClick={props.onMenuItemClick} root={true} role="menu" />
         </div>
     );
 }
