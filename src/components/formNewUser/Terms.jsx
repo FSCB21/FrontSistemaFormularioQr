@@ -1,7 +1,12 @@
+/* Archivo que contiene los terminaos y condiciones del formulario principal */
+
+
 import React from 'react'
 
+//Se importan los componentes de estilado de primereact
 import { Accordion, AccordionTab } from 'primereact/accordion';
 
+//Iconos de estilado que se obtienen de la libreria de react-icons
 import { AiOutlineFileSearch } from 'react-icons/ai'
 import { FiDatabase } from 'react-icons/fi'
 import { RiFileUserLine, RiShieldLine, RiSearchEyeLine } from 'react-icons/ri'
@@ -9,9 +14,11 @@ import { BsCreditCard, BsTelephone } from 'react-icons/bs'
 import { FaUserTimes } from 'react-icons/fa'
 import { GoBook } from 'react-icons/go'
 
+//Renderizamos el componente de terminos y condiciones
 const Terms = () => {
   return (
     <div>
+        {/* Contenedor de acordion con los puntos principales de los terminos y condiciones */}
         <Accordion className="accordion-custom" activeIndex={0}>
                 <AccordionTab header={<React.Fragment><AiOutlineFileSearch/><span className='text-xs'> Uso De La Información Personal</span></React.Fragment>}>
                     <p className='text-xs'>

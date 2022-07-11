@@ -1,17 +1,33 @@
+/* Archivo que contiene la seccion de filtros del modulo de reportes */
+
+//Importamos los ganchos y el componente de react
 import React, { useState, useEffect } from 'react'
 
+//Importamos componentes de estilado de prime react
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { Calendar } from 'primereact/calendar';
 import { SelectButton } from 'primereact/selectbutton';
+
+//Importamos el servicio de consultas al api
 import LugarRegistroService from '../../service/LugarRegistroService';
 
+//Metodo que se encarga de renderizar el componente
 const FilterComponent = (params) => {
 
     let today = new Date()
+    
+    //Gancho que almacena el campo a filtrar
     const [ campoSeleccionado, setCampoSeleccionado ] = useState({val:''})
+    //Gancho que almacena todas las ciudades de registro
+    const [lugaresRegistro, setLugaresRegistro] = useState([])
+    //Gancho que almacena el valor del campo a filtrar
+    const [valueOption, setValueOption] = useState('')
+    //Gancho que almacena un valor secundario del campo a filtrar
+    const [valueOption2, setValueOption2] = useState('')
 
+    //Arreglo de las opciones disponibles en el selector desplegable
     const dataDropDown = [
         {label:'Nombres', val:'nombres', type:1},
         {label:'Apellidos', val:'apellidos', type:1},
@@ -24,23 +40,23 @@ const FilterComponent = (params) => {
         {label:'Estado Código', val:'estado_codigo', type:3},
     ]
 
+    //Arreglo que contiene las opciones para el selector de estado de codigo
     const optionsState = [
         {label:'Canjeado', value:1},
         {label:'Sin Canjear', value:0},
     ]
 
+    //Estructura del item selector de mes
     const monthNavigatorTemplate=(e)=> {
         return <Dropdown value={e.value} options={e.options} onChange={(event) => e.onChange(event.originalEvent, event.value)} style={{ lineHeight: 1 }} />;
-      }
+    }
     
+    //Estructura del item selector de año
       const yearNavigatorTemplate=(e)=> {
         return <Dropdown value={e.value} options={e.options} onChange={(event) => e.onChange(event.originalEvent, event.value)} className="p-ml-2" style={{ lineHeight: 1 }} />;
       }    
 
-    const [lugaresRegistro, setLugaresRegistro] = useState([])
-    const [valueOption, setValueOption] = useState('')
-    const [valueOption2, setValueOption2] = useState('')
-
+    //Función que obtiene los lugares de registro de la base de datos cada que se renderiza el componente
     useEffect(() => {
         lugarRegistroService.getAll().then(res=>{
             setLugaresRegistro(res.data)
@@ -54,11 +70,13 @@ const FilterComponent = (params) => {
 
     const lugarRegistroService = new LugarRegistroService()
     
+    //Metodo que establece el valor del campo seleccionado a su respectivo gancho
     const onCampoChange = (e) =>{
         setValueOption('')
         setCampoSeleccionado(e.value)
     }
 
+    //Gancho que guarda la opcion del filtro, en el parametro de filtros general
     const SaveOption = () =>{
         if((campoSeleccionado.type!==4 && (valueOption || valueOption===0)) || (campoSeleccionado.type===4 && valueOption && valueOption2)){
             let condiciones = []
@@ -71,15 +89,18 @@ const FilterComponent = (params) => {
             params.toast.current.show({severity:'error', summary: 'FXA Te Informa', detail: 'No pueden existir campos vacios', life: 3000});
     }
 
+    //Gancho que borra un filtro del filtro general segun el id enviado por parametros
     const DeleteOption = (id) =>{
         let condiciones = [...params.condicionesFilter]
         condiciones.splice(id,1)
         params.setCondicionesFilter(condiciones)
     }
 
+    //Etiquetas de retorno del componente
   return (
     <div className='mt-4'>
         <div className='grid'>
+            {/* Campos para la creacion de un nuevo filtro */}
             <div className="col-12 md:col-1">
                 <Button icon="pi pi-plus" onClick={SaveOption} className="mb-2"></Button>
             </div>
@@ -124,6 +145,8 @@ const FilterComponent = (params) => {
                 </div>
             </>}
         </div>
+
+        {/* Listado de filtros anteriores */}
         {
             params.condicionesFilter.map((el,id)=>{
                 return <div className='grid mt-4' key={id}>

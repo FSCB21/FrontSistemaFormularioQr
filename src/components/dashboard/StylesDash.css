@@ -1,7 +1,12 @@
+/* Archivo que contiene las clases de estilo para el compoenente de dashboard */
+
+/* Cambio del tamaño de carta cuando a esta se le pase el cursor por encima */
 .hoverCard:hover{
     transform: scale(105%);
     cursor: default;
 }
+
+/* Estilos de transicion para la animacion */
 .hoverCard{
     transition: .5s;
 }

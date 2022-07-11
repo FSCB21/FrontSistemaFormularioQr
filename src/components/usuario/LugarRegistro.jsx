@@ -1,4 +1,9 @@
+/* Archivo que contiene el componente de gestion de lugares de registro */
+
+//Importamos los ganchos y el componente de react
 import React, { useRef, useState, useEffect } from 'react'
+
+//Importamos componentes de estilado de prime react
 import { Card } from 'primereact/card'
 import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
@@ -6,23 +11,44 @@ import { Toast } from 'primereact/toast'
 import { InputText } from 'primereact/inputtext'
 import { Button } from 'primereact/button'
 import { FilterMatchMode } from 'primereact/api';
-import LoadPage from '../LoadPage'
-import LugarRegistroService from '../../service/LugarRegistroService'
 import { OverlayPanel } from 'primereact/overlaypanel'
-import classNames from 'classnames'
-import { useFormik } from 'formik'
+
+//Importamos componente de carga
+import LoadPage from '../LoadPage'
+
+//Importamos la clase de consulta al api
+import LugarRegistroService from '../../service/LugarRegistroService'
+
+//Importamos los validadores de formulario para lugar de registro
 import validationLugarRegistro from '../../validations/validationLugarRegistro'
 
+//Importamos libreria para la gestion de clases
+import classNames from 'classnames'
+
+//Importamos libreria para la facil validacion de formulario
+import { useFormik } from 'formik'
+
+//Metodo que se encarga de renderizar el componente
 const LugarRegistro = () => {
 
+    //Referencia al item de overlaypanel
     const op = useRef(null);
+    //Referencia al compoenente de alertas emergentes
     const toast = useRef(null);
+
+    //Gancho que gestiona el compoenente de carga
     const [loading, setLoading] = useState(false)
+    //Gancho que almacena la informacion de todos los lugares de registro
     const [lugaresRegistro, setLugaresRegistro] = useState([])
+    //Gancho que almacena el valor del filtro globar para la tabla
     const [globalFilterValue, setGlobalFilterValue] = useState('');
+    //Gancho que almacena los filtros para la tabla
     const [filters, setFilters] = useState(null);
+    //Gancho que recarga el componente cuando el valor de este cambia
     const [ loadData, setLoadData] = useState(0)
 
+    //Metodo que va a cargar la informacion de los lugares de registro, en un primer momento
+    //Tambien se ejecutara el metodo cuando el valor del gancho establecido cambie
     useEffect(() => {
       setLoading(true)
       const lugarRegistroService = new LugarRegistroService()
@@ -36,6 +62,8 @@ const LugarRegistro = () => {
       }
     }, [loadData]) //eslint-disable-line
     
+    //Configuracion basica del formulario
+    //Donde se validan los campos y se envia la data al api para crear un nuevo registro
     const formik = useFormik({
       initialValues: {
           nombre_lugar_registro: '',
@@ -53,19 +81,20 @@ const LugarRegistro = () => {
       }
   });
 
-
+  //Funcion que recibe el estado del codigo de descuento y retorna un input con un estilo segun el estado del codigo
     const estadoField = (data) =>{    
-        
         return <span className={data.estado?'code-style code-canjeado':'code-style code-sin-canjear'}>
         {data.estado?"Activo":"Inactivo"}
         </span>  
-        
     }
 
+    //Componente que se activa al momento de que la tabla recive el evento de "Edicion"
+    //Retornara un input de tipo texto el cual deja editarse
     const textEditor = (options) => {
         return <InputText type="text" className='w-full' value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
     }
 
+    //Metodo que actualiza la informacion de un registro en la abse de datos al momento de dar clic en la confirmacion
     const onRowEditComplete = (e) =>{
       const lugarRegistroService = new LugarRegistroService()
       if(!(e.data.nombre_lugar_registro === e.newData.nombre_lugar_registro)){
@@ -89,6 +118,7 @@ const LugarRegistro = () => {
       setGlobalFilterValue('');
   }
 
+  //Metodo que escucha el ingreso de texto en el campo de filtro, y segun este filtra la informacion de la tabla
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
 
@@ -99,12 +129,15 @@ const LugarRegistro = () => {
     setGlobalFilterValue(value);
   }
 
+  //Metodo valida si hay algun error en la validacion de formik
   const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     
+  //Metodo que obtiene el mensaje de error segun el campo enviado por los parametros
   const getFormErrorMessage = (name) => {
       return isFormFieldValid(name) && <small className="p-error mb-2 block">{formik.errors[name]}</small>;
   };
 
+  //Campo que renderiza el encabezado de la tabla de lugares de registro
   const header = () => {
     return (
         <div className="grid">
@@ -121,6 +154,7 @@ const LugarRegistro = () => {
     )
   }
 
+  //Campo que renderiza el boton de cambio de estado segun registro
   const bodyChangeState = e =>{
     return <>
       {e.estado &&
@@ -132,6 +166,7 @@ const LugarRegistro = () => {
     </>
   }
 
+  //Campo que renderiza el boton de cambio de estado, pero estando inhabilitado
   const bodyChangeStateD = e =>{
     return <>
       {e.rowData.estado &&
@@ -144,6 +179,8 @@ const LugarRegistro = () => {
   }
 
   const lugarRegistroService = new LugarRegistroService()
+
+  //Metodo que deshabilita un lugar de registro segun el elemento enviado como parametro
   const disableLugarRegistro = (e) =>{
       lugarRegistroService.disable(e.id_lugar_registro).then(res=>{
         toast.current.show({severity:'success', summary: 'FXA Te Informa', detail: res.data, life: 3000});
@@ -151,6 +188,7 @@ const LugarRegistro = () => {
       })
   }
 
+  //Metodo que habilita un lugar de registro segun el elemento enviado como parametro
   const enableLugarRegistro = (e) =>{
     lugarRegistroService.enable(e.id_lugar_registro).then(res=>{
       toast.current.show({severity:'success', summary: 'FXA Te Informa', detail: res.data, life: 3000});
@@ -158,13 +196,19 @@ const LugarRegistro = () => {
     })
   }
 
+  //Retornamos las etiquetas del compoenente
   return (<>
+
+    {/* Componente de carga */}
     {loading && 
         <div className='relative h-screen w-full justify-content-center align-items-center flex'>
             <LoadPage/>
         </div>
     }
+    {/* Componente de alertas emergentes */}
     <Toast ref={toast} />
+
+    {/* Tabla de lugares de registro */}
     {!loading &&
       <Card>
         <DataTable  filters={filters} paginator rows={10} rowsPerPageOptions={[10,20,50, 'all']} paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown" currentPageReportTemplate="De {first} a {last} de un total de {totalRecords}"
@@ -178,6 +222,7 @@ const LugarRegistro = () => {
       </Card>
     }
 
+    {/* Ventana modal de crear un nuevo lugar de registro */}
     <OverlayPanel ref={op} onHide={formik.resetForm} id="overlay_panel" style={{ width: '250px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)' }} breakpoints={{'640px': '90vw'}}>
         <div className="col-12">
             <span className="p-float-label">

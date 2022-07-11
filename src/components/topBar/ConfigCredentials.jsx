@@ -1,6 +1,6 @@
 /*Hoja para definir el contenido de la carta en seccion "Gestionar contraseñas" */
 
-//Importacion de cmponentes o librerias necesarias
+//Importacion de componentes o librerias necesarias
 import React from 'react'
 
 import { Dropdown } from 'primereact/dropdown';
@@ -14,6 +14,8 @@ import './ConfigCredentials.css'
 import { FaUserShield } from 'react-icons/fa'
 import { Button } from 'primereact/button';
 import { useFormik } from 'formik';
+
+//Importamos el componente de validacion de formulario
 import validationChangePass from '../../validations/validationChangePass';
 
 //Funcion para validar los datos de la seccion
@@ -74,7 +76,6 @@ const ConfigCredentials = () => {
 
             <label className='block mb-2 mt-3 mx-3'>Seleccione el rol a cambiar la contraseña</label>
             <Dropdown className='w-full BorderFormNewUser' value={formik.values.nombre_usuario} name='nombre_usuario' options={rols} itemTemplate={itemTemplate} onChange={formik.handleChange} tooltip="Seleccione un rol" tooltipOptions={{ position: 'top' }} />
-
             <label htmlFor="contraseña" className={"block mb-2 mt-3 mx-3 "/*  + classNames({ 'p-error': isFormFieldValid('contraseña') }) */}>Nueva Contraseña</label>
             <Password
                 value={formik.values.nueva_contraseña}

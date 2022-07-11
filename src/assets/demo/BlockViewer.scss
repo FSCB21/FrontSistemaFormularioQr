@@ -1,4 +1,3 @@
-/*Estilos de base- Plantilla*/
 .block-viewer {
     .block-section {
         margin-bottom: 4rem;
@@ -10,7 +9,7 @@
         background-color: var(--surface-section);
         border-top-left-radius: 12px;
         border-top-right-radius: 12px;
-        border: 1px solid var(--surface-d);
+        border:1px solid var(--surface-d);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -38,8 +37,7 @@
             user-select: none;
             margin-left: 1rem;
 
-            a,
-            button {
+            a,button {
                 display: flex;
                 align-items: center;
                 margin-right: .75rem;
@@ -85,7 +83,7 @@
 
     .block-content {
         padding: 0;
-        border: 1px solid var(--surface-d);
+        border:1px solid var(--surface-d);
         border-top: 0 none;
         border-bottom-left-radius: 12px;
         border-bottom-right-radius: 12px;
@@ -95,8 +93,7 @@
     pre[class*="language-"] {
         margin: 0 !important;
 
-        &:before,
-        &:after {
+        &:before, &:after {
             display: none !important;
         }
 
@@ -110,7 +107,6 @@
             padding: 0 2rem !important;
 
             .token {
-
                 &.tag,
                 &.keyword {
                     color: #2196F3 !important;

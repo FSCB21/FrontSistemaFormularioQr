@@ -1,3 +1,6 @@
+/* Clases de estilo basico para los componentes de usuario */
+
+/* Estilo para el estado del codigo de descuento por usuario */
 .code-style{
     display: block;
     white-space: nowrap;
@@ -8,6 +11,7 @@
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05), 0 3px 6px rgba(0, 0, 0, 0.10)
 }
 
+/* Estilos que varian segun el estado de codigo */
 .code-canjeado{
     background-color: #92e981ad;
     color: #186b09c0;

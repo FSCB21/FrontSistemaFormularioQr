@@ -12,7 +12,7 @@ import { OverlayPanel } from 'primereact/overlaypanel';
 import { Slider } from 'primereact/slider';
 import { ScrollPanel } from 'primereact/scrollpanel';
 
-//
+
 const Graficas = (params) => {
 
     const op = useRef(null);
@@ -116,12 +116,8 @@ const Graficas = (params) => {
         })
     }
 
-
-
-
     //Filtrar grafica
     const [dataOpcionesLugaresRegistro, setDataOpcionesLugaresRegistro] = useState(params.lugaresRegistroOptions)
-
 
     //Filtros Grafica Edad
     const [selectEdad, setSelectEdad] = useState({ value: 18, state: false })

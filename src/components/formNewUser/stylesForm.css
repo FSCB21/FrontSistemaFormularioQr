@@ -1,3 +1,6 @@
+/* Archivo con los estilos principales del componente de formulario */
+
+/* Estilo del input para el telefono */
 .PhoneInputInput{
     outline: none;
     border: 0;
@@ -5,24 +8,29 @@
     font-family: Poppins;
 }
 
+/* Bordeado de los campos del formulario */
 .BorderFormNewUser{
     border-radius: 30px !important;
 }
 
+/* Bordeado a la calse de primereact/plantilla */
 .p-inputtext{
     border-radius: 30px ;
 }
 
+/* Estilos para el contenedor de correo */
 .mail-container{
  margin: 0 !important;
  padding: 0 !important;
 }
 
+/* Estilos para la imagen de fondo del formulario */
 .bodyForm{
     background-repeat: no-repeat;
     background-size: cover;
 }
 
+/* Referencia a cada una de las posibles imagenes de fondo */
 .bodyForm-image-1{
   background-image: url('/images/Fondos/Fondo2.jpg');
 }
@@ -36,10 +44,13 @@
   background-image: url('/images/Fondos/Fondo5.jpg');
 }
 
+
+/* Transparencia a la carta de formulario de registro */
 .cardForm{
     background: rgba(255, 255, 255, 0.678);
 }
 
+/* Animacion para el componente de carga */
 .tracking-in-contract{
     -webkit-animation: tracking-in-contract 2s cubic-bezier(0.215, 0.610, 0.355, 1.000) both infinite;
 	        animation: tracking-in-contract 2s cubic-bezier(0.215, 0.610, 0.355, 1.000) both infinite;

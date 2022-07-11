@@ -1,18 +1,37 @@
-import { Button } from 'primereact/button'
+/* Archivo que almacena el contenido del dialogo que aparece al momento de registrarse en el sistema */
+
+//Importacion de componentes o librerias necesarias
 import React,{ useState, useEffect } from 'react'
+
+//Importamos los compoenentes de estilo de primereact
+import { Button } from 'primereact/button'
+
+//Importamos el compoenente de estilado para el número de telefono
 import PhoneInput from 'react-phone-number-input'
+
+//Importamos el servicio de consultas al api
 import FormService from '../../service/FormService'
 
+
+//Definimos el compoenente a renderizar
 const DialogCodeSend = (params) => {
 
+    //Gancho que almacena si el boton de reenviar mensaje de texto esta activo o inactivo
     const [ estadoBoton, setEstadoBoton ] = useState(true)
+    //Gancho encargado de volver a renderizar el estado del boton cada que cambie
     const [ deshabilitarBoton, setDeshabilitarBoton ] = useState(0)
+    //Gancho que indica que compoenentes se deben mostrar
+    const [statePhoneInput, setStatePhoneInput] = useState(true)
+    //Gancho que almacena el nuevo numero de telefono si es que lo hay
+    const [newPhone, setNewPhone] = useState(params.telefono_contacto)
 
+    //Metodo que establece el estado del boton en falso despues de 1 minuto
     useEffect(() => {
       setTimeout(()=>setEstadoBoton(false),60000)
       return () => {}
     }, [deshabilitarBoton])
 
+    //Funcion que envia un mensaje de texto y despues responde con mensaje de error o no
     const sendSms = () =>{
         setEstadoBoton(true)
         setDeshabilitarBoton(deshabilitarBoton+1)
@@ -28,12 +47,9 @@ const DialogCodeSend = (params) => {
     }
 
 
-    const [statePhoneInput, setStatePhoneInput] = useState(true)
-
-    const [newPhone, setNewPhone] = useState(params.telefono_contacto)
-
     const formService = new FormService()
 
+    //Metodo que ejecuta la funcion de cambiar de núemro en el api, para que de esta manera se cambie el npumero del usuario si este lo puso mal
     const changeNumber = () =>{
         if(params.telefono_contacto === newPhone){
             params.toast.current.show({severity:'error', summary: 'FXA Te Informa', detail: 'El número de telefono no ha cambiado', life: 3000});
@@ -45,14 +61,18 @@ const DialogCodeSend = (params) => {
         }
     }
 
+    //Metodo que cambia el valor del gancho de número de telefono
     const setNumero2 =(e)=>{
         if(e)
             (!e.length>4) ? e = "" :
 
             setNewPhone(e)
     }
+
+    //Retornamos las etiquetas que se desean renderizar
   return (
     <div>
+        {/* Mensaje de codigo enviado con exito */}
         {statePhoneInput && <>
             <h5>El Código ha sido enviado</h5>
             <p>Se ha enviado el código de descuento al teléfono celular que aparece a continuación, si no te ha llegado el código puedes probar reenviarlo el boton se activa en un minuto.</p>
@@ -70,6 +90,7 @@ const DialogCodeSend = (params) => {
                 <Button type="button" onClick={()=>params.closeDialog()} label="Aceptar" className='BorderFormNewUser mt-4'/>
             </div>        
         </>}
+        {/* Seccion de cambiar el núemro de telefono */}
         {!statePhoneInput && <>
             <h5>Cambiar Número De Teléfono</h5>
             <p>Cambia tu número de telefono en la siguiente sección, una vez realices el cambio da clic en "Reenviar Código".</p>
