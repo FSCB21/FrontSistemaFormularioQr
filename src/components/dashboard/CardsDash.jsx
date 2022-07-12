@@ -1,28 +1,48 @@
+/* Archivo que contiene el renderizado del componente referente a las cartas que se encuentran en el dashboard */
+
+//Importamos los ganchos y el componente de react
 import React, {useEffect, useState} from 'react'
 
-import DashBoardDataService from '../../service/DashBoardDataService'
-import ViewsCounterService from '../../service/ViewsCounterService'
+//Importamos componentes de estilado de prime react
 import { Divider } from 'primereact/divider';
 import { Skeleton } from 'primereact/skeleton';
 import { Button } from 'primereact/button';
+
+//Importamos el metodo que permite la navegacion de pagina
 import { useHistory } from 'react-router-dom';
+
+//Importamos el elemento que permite la redireccion a un componente infrerior, pero animada
 import { Link } from "react-scroll";
+
+//Importamos los servicios de consulta al api
+import DashBoardDataService from '../../service/DashBoardDataService'
+import ViewsCounterService from '../../service/ViewsCounterService'
+
+//Importamos la funcion que genera números aleatroios
 import RetornarNombreMes from '../../helpers/RetornarNombreMes'
 
+//Importamos las clases de estilo del dash
 import './StylesDash.css'
 
 //iconos
 import { FaSms, FaRegFolderOpen, FaEye } from 'react-icons/fa';
 import { GiBalloonDog } from 'react-icons/gi';
 
+//Definimos componente
 const CardsDash = () => {
 
     const history = useHistory()
 
+    //Gancho que almacena la informacion basica de las cartas
     const [dataCartas, setDataCartas] = useState({cantidadCumpleañeros:{}})
+    //Gancho que almacena la data de la carta de contador de visitas
     const [dataCartaCounter, setDataCartaCounter] = useState({})
+    //Gancho que se usa como recargador del componente
     const [reload, setReload] = useState(0)
+    //Gancho que almacena el estado del componente de carga
+    const [loading, setLoading] = useState(false)
 
+    //Metodo de consulta que trae la informacion basica de las cartas
     useEffect(() => {
         setLoading(true)
         const dashBoardDataService = new DashBoardDataService()
@@ -43,16 +63,19 @@ const CardsDash = () => {
       }
     }, [reload]) //eslint-disable-line
 
+    //Metodo que renderiza el componente mediante el cambio de su estado
     const reloadData = () =>{
         setReload(reload+1)
     }
 
-    const [loading, setLoading] = useState(false)
-
+    /* Renderizado de etiquetas */
   return (<>
+        {/* Seccion de actualizar informacion */}
         <Divider align='right' type="dashed" style={{background:'transparent'}}>
             <Button className='text-sm p-1 p-button-outlined' onClick={reloadData} icon='pi pi-refresh' label='Actualizar Información'/>
         </Divider>
+        {/* Carta de contador de visitas */}
+        {/* Dentro tiene su estado de carga */}
         <div className="col-12 lg:col-6 xl:col-3">
             <Link
             to="graficaMensual"
@@ -82,6 +105,7 @@ const CardsDash = () => {
                 </div>
             </Link>
         </div>
+        {/* Carta de contador de registros */}
         <div className="col-12 lg:col-6 xl:col-3">
             <div className="card mb-0 hoverCard cursor-pointer" onClick={()=>history.push('/dash/registros')}>
                 {!loading && <>
@@ -104,6 +128,7 @@ const CardsDash = () => {
                 </>}
             </div>
         </div>
+        {/* Carta de contador de cumpleañeros */}
         <div className="col-12 lg:col-6 xl:col-3">
             <div className="card mb-0 hoverCard cursor-pointer" onClick={()=>history.push('/dash/cumpleaños')}>
                 {!loading && <>
@@ -127,6 +152,7 @@ const CardsDash = () => {
 
             </div>
         </div>
+        {/* Carta de contactos */}
         <div className="col-12 lg:col-6 xl:col-3">
             <div className="card mb-0 hoverCard">
                 {!loading && <>

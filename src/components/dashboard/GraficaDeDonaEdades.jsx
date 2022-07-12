@@ -1,21 +1,47 @@
+/* Archivo que contiene el renderizado de la grafica de edades o dona del dashBoard */
+
+//Importamos los ganchos y el componente de react
 import React, { useRef, useState, useEffect } from 'react'
+
+//Importamos componentes de estilado de prime react
 import { Button } from 'primereact/button'
 import { Chart } from 'primereact/chart'
 import { Divider } from 'primereact/divider'
-import ColoresGraficas from '../cumpleaños/ColoresGraficas'
-import DashBoardDataService from '../../service/DashBoardDataService'
-import GenerateRandom from '../../helpers/GenerateRandom'
 import { OverlayPanel } from 'primereact/overlaypanel'
 import { Slider } from 'primereact/slider'
 import { ScrollPanel } from 'primereact/scrollpanel'
 
+//Importamos el archivo que tiene los colores base para generar una grafica
+import ColoresGraficas from '../cumpleaños/ColoresGraficas'
+
+//Importamos el archivo de consultas al api
+import DashBoardDataService from '../../service/DashBoardDataService'
+
+//Importamos la funcion para generar un número aleatorio segun los argumentos enviados
+import GenerateRandom from '../../helpers/GenerateRandom'
+
+//Renderizado del componente
 const GraficaDeDonaEdades = () => {
 
     const dashBoardDataService = new DashBoardDataService()
 
+    //Gancho que almacena la informacion de edad de las personas registradas en el sistema
     const [dataEdad, setDataEdad] = useState([])
+    //Gancho que almacenara el orden de los colores para crear la grafica
     const [arreloNumerosColores,setArreloNumerosColores] = useState([])
+    //Gancho que almacena la informacion de edad que es mostrada en la grafica
+    const [dataGraficaEdad, setDataGraficaEdad] = useState({})
+    //Gancho que almacena la edad elejida por el usuario para realizar el filtro
+    const [selectEdad, setSelectEdad] = useState({value:18,state:false})
+    //Gancho que almacena la edad restante en el filtro de rango de edad
+    const [selectEdadDefault, setSelectEdadDefault] = useState([19,100])
+    //Gancho que almacena las edades adicionales en caso de que se agregue un filtro extra
+    const [edadAdicional, setEdadAdicional] = useState([])
 
+    //Referencia al componente de overlaypanel
+    const op = useRef(null);
+    
+    //Funcion que establece el arreglo de orden de colores para la grafica
     const setColors = () =>{
         let i = []
 
@@ -29,6 +55,7 @@ const GraficaDeDonaEdades = () => {
         setColors()
     },[]) //eslint-disable-line
 
+    //Gancho que definira un valor a los ganchos de estado segun las edades de los usuarios que son obtenidas del api
     useEffect(() => {
         if(arreloNumerosColores[0]){
             dashBoardDataService.getDataEdades().then(res=>{
@@ -38,9 +65,8 @@ const GraficaDeDonaEdades = () => {
         }
         return () => {}
     }, [arreloNumerosColores]); //eslint-disable-line
-
-    const op = useRef(null);
      
+    //Objeto que almacena la configuracion basica de la grafica
     const basicOptions = {
         maintainAspectRatio: false,
         aspectRatio: 1,
@@ -52,12 +78,12 @@ const GraficaDeDonaEdades = () => {
         animation:false
     };
 
+    //Metodo que obtiene la edad segun la fecha de nacimiento que sea enviada como parametro
     const getEdad = (fecha) =>{
         return new Date().getFullYear() - new Date(fecha).getFullYear()
     }
 
-    const [dataGraficaEdad, setDataGraficaEdad] = useState({})
-
+    //Metodo que cuenta los grupos de edades segun los filtros y las establece en el gancho de grafica de edad, para que la grafica lo muestre
     const getDataGraficaEdad = (data) =>{
         let edades = []
 
@@ -83,6 +109,8 @@ const GraficaDeDonaEdades = () => {
         setGraficData(edadesContadas, setDataGraficaEdad)
     }
 
+    //Funcion que organiza la data para que esta corresponda a la estructura que recibe la grafica
+    //Como parametros recive un areglo con la informacion a ordenar y un metodo para establecer el orden en el gancho 
     const setGraficData = (arreglo, metodo) =>{
         const labels = []
         const data = []
@@ -106,11 +134,9 @@ const GraficaDeDonaEdades = () => {
     }
 
 //Filtros Grafica Edad
-const [selectEdad, setSelectEdad] = useState({value:18,state:false})
-const [selectEdadDefault, setSelectEdadDefault] = useState([19,100])
 
-const [edadAdicional, setEdadAdicional] = useState([])
-
+//Metodo que cambia el valor del rango de fecha a filtrar
+//Cambia el valor de los ganchos de edad seleccionada y la edad por defecto
 const changeRange = value =>{
     if(value >= selectEdadDefault[1])
      value = selectEdadDefault[1]-1
@@ -119,6 +145,8 @@ const changeRange = value =>{
     setSelectEdadDefault([value+1,100])
 }
 
+//En dado caso de que sea mas de un filtro de edad
+//Se ejecuta funcion que cambia el valor de rango de edad segun su pocicion en el arreglo
 const changeRangeArray = (value, id) => {
     let i = edadAdicional
 
@@ -129,6 +157,7 @@ const changeRangeArray = (value, id) => {
     setSelectEdadDefault([value[1]+1,100])
 }
 
+//Metodo que agrega un nuevo filtro para el gancho de arreglo de edad adicional
 const addFilterRangeEdad = () =>{
     let i = edadAdicional
     if(i.length===0){
@@ -150,13 +179,14 @@ const addFilterRangeEdad = () =>{
         }
     }
 }
-
+//Metodo que restablece los valores iniciales del filtro de edades
 const resetFilter = () =>{
     setEdadAdicional([])
     setSelectEdad({value:18,state:false})
     setSelectEdadDefault([19,100])
 }
 
+//Metodo que establece el filtro de edad y recuenta las edades para que la grafica cambie segun los nuevos parametros establecidos
 const setFilter = () =>{
     let totalAños = []
 
@@ -188,8 +218,10 @@ const setFilter = () =>{
 }
     
 
+    /* Renderizado de componentes */
   return (
       <div  className="col-12 xl:col-6">
+        {/* Grafica de edad */}
         <div className='card'>
             <h5>Gráfica Edades:</h5>
             <Chart type="doughnut" data={dataGraficaEdad} options={basicOptions} style={{ position: 'relative', width: 'auto' }} />
@@ -200,6 +232,7 @@ const setFilter = () =>{
             <Button label='Quitar Filtro' icon='pi pi-trash' className='p-button-outlined BorderFormNewUser my-2 p-button-secondary' onClick={()=>getDataGraficaEdad(dataEdad)}/>
         </div>
 
+        {/* Ventana emergente para el filtro */}
         <OverlayPanel ref={op} style={{ width: '450px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)' }} breakpoints={{'640px': '95vw'}}>
             <h4>Filtro personalizado</h4>
             <ScrollPanel className='w-full p-2' style={{maxHeight: '60vh'}}>
