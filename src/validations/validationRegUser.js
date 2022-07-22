@@ -9,6 +9,11 @@ const validationRegUser = (data) =>{
     //Definimos un objeto el cual contendra todos los errores en dado caso que falle una validacion
     let errors = {};
 
+    //Quitamos los espacios al inicio y al final para evitar errores
+    data.nombres = data.nombres.trim()
+    data.apellidos = data.apellidos.trim()
+    data.correo_el = data.correo_el.trim()
+
     //Decimos si no esta definido o no tiene algun valor el campo de nombres
     if (!data.nombres) 
         //En caso de que asi sea va a retornar valor de que los nombres son obligatorios
@@ -70,6 +75,15 @@ const validationRegUser = (data) =>{
     else if(!isPossiblePhoneNumber(data.telefono_contacto))
         //Retornara mensaje de error de formato de numero no es posible
         errors.telefono_contacto = 'Formato de número no es posible.';
+    
+    //Si el telefono no tiene algun valor
+    if (!data.telefono_contacto2) 
+        //Retornara mensaje de que el telefono es obligatorio
+        errors.telefono_contacto2 = 'La verificación del número de teléfono es obligatoria.';
+    //Si no, si no es un posible numero de telefono
+    else if(data.telefono_contacto2!==data.telefono_contacto)
+        //Retornara mensaje de error de formato de numero no es posible
+        errors.telefono_contacto2 = 'Los números de telefono no coinciden.';
     
 
     //Se convierte el numero de documento a un string

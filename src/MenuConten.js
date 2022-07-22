@@ -3,6 +3,7 @@
 //Importamos los iconos que se usan en el menu
 //Para los iconos se usa una libreria denominada react-icons la cual contiene diversos iconos para ser usados como etiquetas de react
 import { RiCake2Fill, RiFolder2Fill, RiBriefcase2Fill } from 'react-icons/ri';
+import { FaMoneyBillWave } from 'react-icons/fa';
 
 //Importamos react para decir que se usara esta estructura en este archivo
 import React from 'react'
@@ -31,4 +32,5 @@ export default [
     { items: [{label: MenuConten({descripcion:"Dashboard", icon:()=><RiBriefcase2Fill className='text-xl mr-1'/>}), to: '/dash/' }] },
     { items: [{label: MenuConten({descripcion:"Registros", icon:()=><RiFolder2Fill className='text-xl mr-1'/>}), to: '/dash/registros'}] },
     { items: [{label: MenuConten({descripcion:"Cumpleaños", icon:()=><RiCake2Fill className='text-xl mr-1'/>}), to: '/dash/cumpleaños'}] },
+    { items: [{label: MenuConten({descripcion:"Incentivos", icon:()=><FaMoneyBillWave className='text-xl mr-1'/>}), to: '/dash/incentivos'}] },
 ]

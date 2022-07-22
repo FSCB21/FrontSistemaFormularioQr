@@ -105,6 +105,7 @@ const FormNewUser = () => {
             correo_el: '',
             fecha_nacimiento: false,
             telefono_contacto:'',
+            telefono_contacto2:'',
             numero_doc:'',
             lugar_registro_fk:'',
             accept: false, 
@@ -188,7 +189,7 @@ const FormNewUser = () => {
     }
 
     //Metodo que establece el valor del núemro de telefono en los valores del formulario
-    const setNumero =(e)=>{
+    const setNumero =(e, campo)=>{
         //Si existe "e"
         //Va a validar que e tenga un tamaño superior a 4 caracteres
         //Si no es asi va a establecer el valor de e como vacio
@@ -198,7 +199,7 @@ const FormNewUser = () => {
         //Despues va a establecer el valor del telefono de contacto como el valor de e si este esta definido, si no lo definira como vacio
         formik.setValues({
             ...formik.values,
-            telefono_contacto:e?e:""
+            [campo]:e?e:""
         })
     }
 
@@ -243,7 +244,7 @@ const FormNewUser = () => {
                 //Contenedor del formulario de nuevo registro
                 //Como clases de estilado se dice que ekl tamaño del formulario es de 10 de 12 (80% mas o menos)
                 //Y cuando la pantalla supera las escalas de xl
-                <div className='w-10 xl:w-5'>
+                <div className='w-11 sm:w-9 xl:w-5'>
                     {/* Contenedor del encabezado del formulario, contiene el logo y un breve texto de familiarizacion */}
                     <div className="flex w-full justify-content-center align-items-center flex-column my-4">
                         {/* Imagen del logo para el header del formulario de nuevo registro */}
@@ -262,7 +263,7 @@ const FormNewUser = () => {
 
                             {/* Cada campo tiene una estructura de un contenedor general donde dentro de este estan el input y el mensaje de error */}
                             {/* Se dice que este campo tiene un tamaño del 100% pero cuando el tamaño supera el tamaño sm de pantalla va a tener un tamaño del 50% del componente */}
-                            <div className="col-12 sm:col-6 mt-6">
+                            <div className="col-12 sm:col-6 mt-4 sm:mt-6 ">
                                 {/* Contenedor que da el estilo de label flotante, para esto se usa la clase de p-float-label */}
                                 <span className="p-float-label">
                                     {/* Se define el inputText de prime react el cual ya viene con un estilo predefinido */}
@@ -284,7 +285,7 @@ const FormNewUser = () => {
 
                             {/* Cada campo tiene una estructura de un contenedor general donde dentro de este estan el input y el mensaje de error */}
                             {/* Se dice que este campo tiene un tamaño del 100% pero cuando el tamaño supera el tamaño sm de pantalla va a tener un tamaño del 50% del componente */}
-                            <div className="col-12 sm:col-6 mt-6">
+                            <div className="col-12 sm:col-6 mt-4 sm:mt-6">
                                 {/* Contenedor que da el estilo de label flotante, para esto se usa la clase de p-float-label */}
                                 <span className="p-float-label">
                                     {/* Se define el inputText de prime react el cual ya viene con un estilo predefinido */}
@@ -384,7 +385,7 @@ const FormNewUser = () => {
 
                             {/* Cada campo tiene una estructura de un contenedor general donde dentro de este estan el input y el mensaje de error */}
                             {/* Se dice que este campo tiene un tamaño del 100% pero cuando el tamaño supera el tamaño sm de pantalla va a tener un tamaño del 50% del componente */}
-                            <div className="col-12 sm:col-6 mt-4">
+                            <div className="col-12 sm:col-6 mt-2">
                                 {/* Contenedor que da el estilo de label flotante, para esto se usa la clase de p-float-label */}
                                 <span className="p-float-label">
                                     {/* Se define el inputText de prime react el cual ya viene con un estilo predefinido */}
@@ -406,7 +407,7 @@ const FormNewUser = () => {
 
                             {/* Cada campo tiene una estructura de un contenedor general donde dentro de este estan el input y el mensaje de error */}
                             {/* Se dice que este campo tiene un tamaño del 100% pero cuando el tamaño supera el tamaño sm de pantalla va a tener un tamaño del 50% del componente */}
-                            <div className="col-12 sm:col-6 mt-4">
+                            <div className="col-12 sm:col-6 mt-4 sm:mt-2">
                                 {/* Contenedor que da el estilo de label flotante, para esto se usa la clase de p-float-label */}
                                 <span className="p-float-label">
                                     {/* Se define el input de tipo calendario el cual ya viene con estilo predefinido de la plantilla */}
@@ -452,10 +453,10 @@ const FormNewUser = () => {
 
                             {/* Cada campo tiene una estructura de un contenedor general donde dentro de este estan el input y el mensaje de error */}
                             {/* Se dice que este campo tiene un tamaño del 100% */}
-                            <div className="col-12">
+                            <div className="col-12 sm:col-6">
                                 {/* Se define el label del input a continuacion */}
                                 {/* Se le define la clase de validacion y cambio a error de manera dinamica */}
-                                <label htmlFor="telefono_contacto" className={"mx-3 "+classNames({ 'p-error': isFormFieldValid('telefono_contacto') })}>Número Contacto*</label>
+                                <label htmlFor="telefono_contacto" className={"mx-3 "+classNames({ 'p-error': isFormFieldValid('telefono_contacto') })}>Número Celular*</label>
                                 {/* Usamos la etiqueta de phoneInput para declarar el input que recive el telefono */}
                                 {/**
                                  * Como parametros para que esta etiqueta funcione correctamente se pasa
@@ -472,15 +473,43 @@ const FormNewUser = () => {
                                     name="telefono_contacto"
                                     defaultCountry="CO"
                                     value={formik.values.telefono_contacto}
-                                    onChange={setNumero}
+                                    onChange={e=>setNumero(e, "telefono_contacto")}
                                     countries={['CO', 'EC', 'US']}
                                     />
                                 {/* Se llama el metodo que retorna el mensaje de error en dado caso que la validacion del campo que se pasa como argumento falle */}
                                 {getFormErrorMessage('telefono_contacto')}
                             </div>
+                            {/* Cada campo tiene una estructura de un contenedor general donde dentro de este estan el input y el mensaje de error */}
+                            {/* Se dice que este campo tiene un tamaño del 100% */}
+                            <div className="col-12 sm:col-6">
+                                {/* Se define el label del input a continuacion */}
+                                {/* Se le define la clase de validacion y cambio a error de manera dinamica */}
+                                <label htmlFor="telefono_contacto2" className={"mx-3 "+classNames({ 'p-error': isFormFieldValid('telefono_contacto2') })}>Verificación Celular*</label>
+                                {/* Usamos la etiqueta de phoneInput para declarar el input que recive el telefono */}
+                                {/**
+                                 * Como parametros para que esta etiqueta funcione correctamente se pasa
+                                 * le damos un name y un id para que formik haga la relacion automaticamente
+                                 * Decimos que de clases va a tener la clase de bordes redondos y tamaño maximo
+                                 * Indicamos que el pais que se va a mostrar por defecto en el internacional es Colombia ("CO")
+                                 * como valor se le define el valor del objeto con nombre similar de la propiedad de values de formik
+                                 * al momento de cambiar el valor del input se va a ejecutar el metodo setNumero
+                                 * Establecemos que los paises de posible seleccion son Colombia (CO), Ecuador (EC) y Estados Unidos (US)
+                                 */}
+                                <PhoneInput
+                                    id="telefono_contacto2" 
+                                    className={"BorderFormNewUser mt-2 p-inputtext p-component "+classNames({ 'p-invalid': isFormFieldValid('telefono_contacto2') })}
+                                    name="telefono_contacto2"
+                                    defaultCountry="CO"
+                                    value={formik.values.telefono_contacto2}
+                                    onChange={e=>setNumero(e, "telefono_contacto2")}
+                                    countries={['CO', 'EC', 'US']}
+                                    />
+                                {/* Se llama el metodo que retorna el mensaje de error en dado caso que la validacion del campo que se pasa como argumento falle */}
+                                {getFormErrorMessage('telefono_contacto2')}
+                            </div>
 
                             {/* Contenedor del campo que muestra si se aceptan las politicas del sistema, decimos que eltamaño es del 100% del contenedor */}
-                            <div className="field-checkbox col-12 mt-3">
+                            <div className="field-checkbox col-12 mt-4 sm:mt-3">
                                 {/* Llamamos el elemento checkBox para crear una casilla de verificacion */}
                                 {/**
                                  * Definimos el id y el name para el uso de formik
@@ -495,7 +524,7 @@ const FormNewUser = () => {
                             </div>
 
                             {/* Contenedor del campo que muestra si se aceptan las politicas del sistema, decimos que eltamaño es del 100% del contenedor */}
-                            <div className="field-checkbox col-12 mt-3">
+                            <div className="field-checkbox col-12 mt-4 sm:mt-3">
                                 {/* Llamamos el elemento checkBox para crear una casilla de verificacion */}
                                 {/**
                                  * Definimos el id y el name para el uso de formik

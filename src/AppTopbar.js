@@ -54,7 +54,7 @@ export const AppTopbar = (props) => {
              * 
              * Le ponemos el estiladon de plantilla en logo 
              */}
-            <Link to="/" className="layout-topbar-logo">
+            <Link to="/dash" className="layout-topbar-logo">
                 {/* Agregamos la imagen del logo que se envuentra en la ruta principal */}
                 <img src={'images/logo-principal.svg'} alt="logo"/>
                 {/* Agregamos un span donde le cambiamos el estilo del texto y agregamos un margen izquierdo */}

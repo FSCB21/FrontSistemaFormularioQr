@@ -342,7 +342,7 @@ const Cumpleaños = () => {
 
             <Toolbar className="mb-4 col-12" left={leftToolbarTemplate} right={rightToolbarTemplate} />
             {!loading && <>
-                <ScrollPanel className='col-12 md:col-6' style={{ maxHeight: '70vh' }}>
+                <ScrollPanel className='col-12 md:col-6' style={{ maxHeight: '80vh' }}>
 
                     <div className='grid w-full card'>
                         <div className='col-12 flex justify-content-between align-items-center'>

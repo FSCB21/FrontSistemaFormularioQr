@@ -75,6 +75,7 @@ import { useCookies } from 'react-cookie';
 
 //Importamos el contenido del menu
 import menu from './MenuConten'
+import Incentivos from './pages/Incentivos';
 
 //Definimos el componente principal del archivo
 const App = () => {
@@ -326,6 +327,8 @@ const App = () => {
                         <Route path="/dash/registros/" exact ><Usuarios /></Route>
                         {/* Si la ruta es exactamente igual a "/dash/cumpleaños" va a reenderizar el componente de cumpleños */}
                         <Route path="/dash/cumpleaños" exact ><Cumpleaños /></Route>
+
+                        <Route path="/dash/incentivos" exact ><Incentivos /></Route>
                     </div>
 
                     {/* Se llama el componente de Footer y se le pasa el color por los parametros */}

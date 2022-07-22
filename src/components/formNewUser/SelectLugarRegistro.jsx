@@ -38,7 +38,17 @@ const SelectLugarRegistro = (props) => {
   //valor de retorno
   //En este caso es solo la etiqueta de seleccion
   return (
-    <Dropdown className={props.className} optionValue='id_lugar_registro' value={lugarRegistroSeleccionado} options={lugares} name="lugar_registro_fk" onChange={onLugarChange} optionLabel="nombre_lugar_registro" filter filterBy="nombre_lugar_registro"/>
+    <Dropdown 
+      className={props.className} 
+      optionValue='id_lugar_registro' 
+      value={lugarRegistroSeleccionado} 
+      options={lugares} 
+      name="lugar_registro_fk" 
+      onChange={onLugarChange} 
+      optionLabel="nombre_lugar_registro" 
+      filter filterBy="nombre_lugar_registro"
+    />
+    
   )
 }
 

@@ -18,6 +18,23 @@
     border-radius: 30px ;
 }
 
+@media (max-width: 570px) {
+
+  .p-card-body{
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  
+  .p-inputgroup{
+    padding-right: 0 !important;
+  }
+  
+  .p-card-body .grid{
+    padding-right: 0 !important;
+  }
+
+}
+
 /* Estilos para el contenedor de correo */
 .mail-container{
  margin: 0 !important;
