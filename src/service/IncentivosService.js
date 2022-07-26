@@ -11,8 +11,8 @@ class IncentivosService  {
     }
 
     //Metodo que actualiza un registro con la data enviada, se requiere tambien enviar un id por los parametros de consulta
-    update(data){
-        return axios.put(`${API}/update?id_incentivo=${data.id_incentivo}`, data)
+    update(data, tipo_update){
+        return axios.put(`${API}/update?id_incentivo_general=${data.id_incentivo}&tipo_update=${tipo_update}`, data)
     }
 
     updateIncentivoLugar(data){
@@ -21,7 +21,12 @@ class IncentivosService  {
 
     //Metodo que elimina de manera permanente una meta
     delete(id){
-        return axios.delete(`${API}/delete/id_incentivo=${id}`)
+        return axios.delete(`${API}/delete?id_incentivo_general=${id}`)
+    }
+
+    //Metodo que elimina de manera permanente una relacion entre una meta y un lugar
+    deleteLugarIncentivo(data){
+        return axios.post(`${API}/delete-incentivo-lugar`,data)
     }
 
     //Metodo que consulta los incentivos segun su estado

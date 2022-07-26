@@ -14,7 +14,6 @@ import { ScrollPanel } from 'primereact/scrollpanel';
 import IncentivosService from '../service/IncentivosService';
 
 //Importamos los componentes extras usados en el codigo
-import NewIncentivo from '../components/incentivos/NewIncentivo';
 import LoadPage from '../components/LoadPage';
 
 //Iconos
@@ -23,6 +22,9 @@ import { Toast } from 'primereact/toast';
 import { Dialog } from 'primereact/dialog';
 import DetallesIncentivo from '../components/incentivos/DetallesIncentivo';
 import RetornarColorSegunPorcentaje from '../helpers/RetornarColorSegunPorcentaje';
+import NuevoIncentivo from '../components/incentivos/NuevoIncentivo';
+import { confirmDialog } from 'primereact/confirmdialog';
+import EditarIncentivo from '../components/incentivos/EditarIncentivo';
 
 
 const Incentivos = () => {
@@ -37,9 +39,9 @@ const Incentivos = () => {
     const [realoadPage, setRealoadPage] = useState(0);
 
     const [displayDetallesIncentivo, setDisplayDetallesIncentivo] = useState(false)
+    const [displayNuevoIncentivo, setDisplayNuevoIncentivo] = useState(false)
 
-    //Referencia al item de overlaypanel para la creacion de un nuevo incentivo
-    const opNew = useRef(null);
+    const [displayEditarIncentivo, setDisplayEditarIncentivo] = useState(false)
 
     const toast = useRef(null);
 
@@ -58,22 +60,20 @@ const Incentivos = () => {
         return <>
             <Button 
                 icon='pi pi-plus' 
-                label='Nuevo' 
+                label='Nuevo Incentivo' 
                 className='hidden sm:block p-button-outlined' 
                 tooltip='Crear una nueva meta de incentivo' 
                 tooltipOptions={{position:'top'}}
-                onClick={e=>opNew.current.toggle(e)}
+                onClick={()=>setDisplayNuevoIncentivo(true)}
             />
-            <Button icon='pi pi-file-excel' label='Cargar Excel' className='hidden sm:block p-button-outlined p-button-success mx-2' tooltip='Importar Archivo De Excel' tooltipOptions={{position:'top'}}/>
             
             <Button 
                 icon='pi pi-plus' 
                 className='block sm:hidden p-button-outlined' 
                 tooltip='Crear una nueva meta de incentivo' 
                 tooltipOptions={{position:'top'}}
-                onClick={e=>opNew.current.toggle(e)}
+                onClick={()=>setDisplayNuevoIncentivo(true)}
             />
-            <Button icon='pi pi-file-excel' className='block sm:hidden p-button-outlined p-button-success mx-2' tooltip='Importar Archivo De Excel' tooltipOptions={{position:'top'}}/>
         </>
     }
 
@@ -95,7 +95,7 @@ const Incentivos = () => {
 
     //Contenido izquierdo del menu superior
     const leftToolbarContent = () =>{
-        return <SelectButton value={verSeccionIncentivo} options={optionsVerSeccionIncentivo} optionValue='value' onChange={(e) => setVerSeccionIncentivo(e.value)} itemTemplate={templateVerSeccionIncentivo} optionLabel="value" />
+        return <SelectButton value={verSeccionIncentivo} unselectable={false} options={optionsVerSeccionIncentivo} optionValue='value' onChange={(e) => setVerSeccionIncentivo(e.value)} itemTemplate={templateVerSeccionIncentivo} optionLabel="value" />
     }
 
 
@@ -131,6 +131,23 @@ const Incentivos = () => {
         })
     }
 
+    const BorrarIncentivoGeneral = id =>{
+        incentivoService.delete(id).then(res=>{
+            toast.current.show({severity:'warn', summary: 'FXA Te Informa', detail: res.data, life: 3000});
+            reloadPageChangeValue()
+        })
+    }
+
+    const AbrirVentanaConfirmacionBorrarIncentivo = id => {
+        confirmDialog({
+            message: '¿Está seguro de eliminar esta meta de incentivo a nivel general?',
+            header: 'Borrar Incentivo General',
+            position:'bottom',
+            icon: 'pi pi-exclamation-triangle',
+            accept:()=>BorrarIncentivoGeneral(id),
+            acceptLabel:'Continuar'
+        });
+    };
     
   return (
     <div className="grid">
@@ -189,12 +206,12 @@ const Incentivos = () => {
                                         <div className="mt-2 md:mt-0 flex align-items-center col-6 sm:col-7 ">
                                             <div className="surface-300 border-round overflow-hidden w-10" style={{height: '11px'}}>
                                             <div className={`bg-${RetornarColorSegunPorcentaje(porcentajes)} h-full`} style={{width: `${porcentajes}%`}}/>
-                                            </div>
+                                        </div>
                                             <span className={`text-${RetornarColorSegunPorcentaje(porcentajes)} ml-3 font-medium`}>%{Math.trunc(porcentajes)}</span>
                                         </div>
                                         <div className='col-6 sm:col-5'>
                                             <Button className='p-button-text p-button-info' onClick={()=>showDetallesIncentivo(el)}  icon='pi pi-eye'/>
-                                            <Button className='p-button-text p-button-danger' /* el.id_incentivo */ icon='pi pi-trash'/>
+                                            <Button className='p-button-text p-button-danger' onClick={()=>AbrirVentanaConfirmacionBorrarIncentivo(el.id_incentivo_general)} icon='pi pi-trash'/>
                                         </div>
                                     </div>
                                 </li>
@@ -207,10 +224,17 @@ const Incentivos = () => {
         </>}
 
         {/* Componente emergente para crear un nuevo incentivo */}
-        <NewIncentivo opNew={opNew} toast={toast} reloadPageChangeValue={reloadPageChangeValue}/>
+        <Dialog header="Nueva Meta de incentivo" visible={displayNuevoIncentivo} className="w-11 sm:w-10 md:w-8 xl:w-5" onHide={() => setDisplayNuevoIncentivo(false)}>
+                <NuevoIncentivo toast={toast} reloadPageChangeValue={reloadPageChangeValue} ocultarVentanaDialogo={()=>setDisplayNuevoIncentivo(false)}/> 
+        </Dialog>
+
+        {/* Componente emergente para editar un incentivo */}
+        <Dialog header={`Editando Incentivo: ${dataDetallesIncentivo.info.titulo}`} visible={displayEditarIncentivo} className="w-11 sm:w-10 md:w-8 xl:w-5" onHide={() => setDisplayEditarIncentivo(false)}>
+               <EditarIncentivo reloadPageChangeValue={reloadPageChangeValue} dataDetallesIncentivo={dataDetallesIncentivo} toast={toast} esconderDialogoEditar={()=>setDisplayEditarIncentivo(false)}/>
+        </Dialog>
 
         <Dialog header={!loading?dataDetallesIncentivo.info.titulo:"Cargando..."} visible={displayDetallesIncentivo} className="w-11 md:w-9 xl:w-6" onHide={() => setDisplayDetallesIncentivo(false)}>
-            <DetallesIncentivo dataDetallesIncentivo={dataDetallesIncentivo} loading={loading} toast={toast}  reloadPageChangeValue={reloadPageChangeValue}/>
+            <DetallesIncentivo dataDetallesIncentivo={dataDetallesIncentivo} setDisplayDetallesIncentivo={setDisplayDetallesIncentivo} reloadPageChangeValue={reloadPageChangeValue} loading={loading} toast={toast}  showDetallesIncentivo={showDetallesIncentivo} setDisplayEditarIncentivo={setDisplayEditarIncentivo}/>
         </Dialog>
 
     </div>

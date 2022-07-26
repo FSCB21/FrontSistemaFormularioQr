@@ -4,6 +4,8 @@ import { Divider } from 'primereact/divider';
 import { Button } from 'primereact/button';
 import LoadPage from '../LoadPage';
 import { InputText } from 'primereact/inputtext';
+import { confirmPopup } from 'primereact/confirmpopup';
+import { confirmDialog } from 'primereact/confirmdialog';
 import IncentivosService from '../../service/IncentivosService';
 const DetallesIncentivo = (params) => {
 
@@ -13,6 +15,8 @@ const DetallesIncentivo = (params) => {
     const [globalFIlterDetallesIncentivo, setGlobalFIlterDetallesIncentivo] = useState("")
 
     const [dataDetallesIncentivo, setDataDetallesIncentivo] = useState([])
+
+
 
     useEffect(() =>{
         OrdenarMenorAMayor(params.dataDetallesIncentivo.data, estadoOrden)
@@ -66,7 +70,7 @@ const DetallesIncentivo = (params) => {
         setFiltroCumplimiento(estado)
     }
 
-    const ToggleEdit = (id, el, state) =>{
+    const ToggleEdit = (id, state) =>{
         let data = [...dataDetallesIncentivo]
         data[id].editActive = state?true:false
         setDataDetallesIncentivo(data)
@@ -74,22 +78,72 @@ const DetallesIncentivo = (params) => {
 
     const changeMetaItem = (id, e)=>{
         let data = [...dataDetallesIncentivo]
-        console.log(e)
-        data[id].new_meta_a_cumplir = e.value
-        setDataDetallesIncentivo(data)
+        data[id].new_meta_a_cumplir = e.target.value
+        setDataDetallesIncentivo([...data])
     }
 
     const incentivoService = new IncentivosService()
-    const ComfirmEdit = (el) =>{
-        let dataUpdate = {
-            "lugar_registro_fk": el.id_lugar_registro,
-            "incentivo_general_fk": params.dataDetallesIncentivo.info.id_incentivo_general,
-            "meta_a_cumplir": el.new_meta_a_cumplir
+    const ComfirmEdit = (el, id) =>{
+
+        if(!el.new_meta_a_cumplir){
+            params.toast.current.show({severity:'error', summary: 'FXA Te Informa', detail: 'La meta a cumplir no puede estar vacia', life: 3000});
+        }else{
+            let dataUpdate = {
+                "lugar_registro_fk": el.id_lugar_registro,
+                "incentivo_general_fk": params.dataDetallesIncentivo.info.id_incentivo_general,
+                "meta_a_cumplir": el.new_meta_a_cumplir
+            }
+            incentivoService.updateIncentivoLugar(dataUpdate).then(res=>{
+                params.toast.current.show({severity:'success', summary: 'FXA Te Informa', detail: res.data, life: 3000});
+                params.showDetallesIncentivo(params.dataDetallesIncentivo.info)
+                ToggleEdit(id, false)
+            })
         }
-        incentivoService.updateIncentivoLugar(dataUpdate).then(res=>{
-            params.toast.current.show({severity:'success', summary: 'FXA Te Informa', detail: res.data, life: 3000});
+
+        
+    }
+
+    const AbrirVentanaConfirmacion = (event, funcion) => {
+        confirmPopup({
+            target: event.currentTarget,
+            message: '¿Está seguro de realizar esta acción?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: funcion,
+            acceptLabel:'Continuar'
+            
+        });
+    };
+
+    const BorrarIncentivoGeneral = () =>{
+        incentivoService.delete(params.dataDetallesIncentivo.info.id_incentivo_general).then(res=>{
+            params.toast.current.show({severity:'warn', summary: 'FXA Te Informa', detail: res.data, life: 3000});
+            params.reloadPageChangeValue()
+            params.setDisplayDetallesIncentivo(false)
+        })
+    }
+
+    const AbrirVentanaConfirmacionBorrarIncentivo = () => {
+        confirmDialog({
+            message: '¿Está seguro de eliminar esta meta de incentivo a nivel general?',
+            header: 'Borrar Incentivo General',
+            position:'bottom',
+            icon: 'pi pi-exclamation-triangle',
+            accept:BorrarIncentivoGeneral,
+            acceptLabel:'Continuar'
+        });
+    };
+
+    const BorrarLugarIncentivo = (el) =>{
+        let data = {
+            "lugar_registro_fk": el.id_lugar_registro,
+            "incentivo_general_fk": params.dataDetallesIncentivo.info.id_incentivo_general
+        }
+        incentivoService.deleteLugarIncentivo(data).then(res=>{
+            params.toast.current.show({severity:'warn', summary: 'FXA Te Informa', detail: res.data, life: 3000});
+            params.showDetallesIncentivo(params.dataDetallesIncentivo.info)
             params.reloadPageChangeValue()
         })
+        
     }
 
   return (
@@ -114,8 +168,8 @@ const DetallesIncentivo = (params) => {
                     <span className={`text-${RetornarColorSegunPorcentaje(porcentajeGeneral)} ml-3 font-medium`}>%{Math.trunc(porcentajeGeneral)}</span>
                 </div>
                 <div className='col-12 sm:col-6 md:col-5 justify-content-center sm:justify-content-start grid'>
-                    <Button className='p-button-text p-button-warning'  icon='pi pi-pencil'/>
-                    <Button className='p-button-text p-button-danger' /* el.id_incentivo */ icon='pi pi-trash'/>
+                    <Button className='p-button-text p-button-warning' onClick={()=>{params.setDisplayEditarIncentivo(true);params.setDisplayDetallesIncentivo(false)}}  icon='pi pi-pencil'/>
+                    <Button className='p-button-text p-button-danger' onClick={AbrirVentanaConfirmacionBorrarIncentivo} icon='pi pi-trash'/>
                 </div>
             </div>
 
@@ -178,12 +232,12 @@ const DetallesIncentivo = (params) => {
                                 </div>
                                 {el.editActive
                                     ?<div className='col-12 sm:col-6 md:col-5 justify-content-center sm:justify-content-start grid'>
-                                        <Button className='p-button-text p-button-success' onClick={()=>ComfirmEdit(el)}  icon='pi pi-check-circle'/>
-                                        <Button className='p-button-text p-button-danger' onClick={()=>ToggleEdit(id, el, false)} icon='pi pi-times-circle'/>
+                                        <Button className='p-button-text p-button-success' onClick={e=>AbrirVentanaConfirmacion(e, ()=>ComfirmEdit(el, id))}  icon='pi pi-check-circle'/>
+                                        <Button className='p-button-text p-button-danger' onClick={()=>ToggleEdit(id, false)} icon='pi pi-times-circle'/>
                                     </div>
                                     :<div className='col-12 sm:col-6 md:col-5 justify-content-center sm:justify-content-start grid'>
-                                        <Button className='p-button-text p-button-warning' onClick={()=>ToggleEdit(id, el, true)}  icon='pi pi-pencil'/>
-                                        <Button className='p-button-text p-button-danger' /* el.id_incentivo */ icon='pi pi-trash'/>
+                                        <Button className='p-button-text p-button-warning' tooltip='Editar' tooltipOptions={{position:'top'}} onClick={()=>ToggleEdit(id, el, true)}  icon='pi pi-pencil'/>
+                                        <Button className='p-button-text p-button-danger' tooltip='Eliminar' tooltipOptions={{position:'top'}} onClick={e=>AbrirVentanaConfirmacion(e, ()=>BorrarLugarIncentivo(el))} icon='pi pi-trash'/>
                                     </div>
                                 }
                             </div>

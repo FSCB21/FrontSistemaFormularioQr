@@ -1,8 +1,15 @@
-const validationNewIncentivo = (data) =>{
+export const validationNewIncentivo = (data) =>{
     let errors = {};
 
-    if(!data.lugar_registro_fk)
-        errors.lugar_registro_fk = 'Definir un lugar de registro es obligatorio'
+    if(!data.titulo)
+        errors.titulo = 'Definir un titulo es obligatorio'
+    else if(!(data.titulo.length>=4 && data.titulo.length<75))
+        errors.titulo = 'El titulo tiene que estar entre 4 y 75 caracteres'
+
+    if(data.descripcion)
+        if(!(data.descripcion.length>=4 && data.descripcion.length<300))
+        errors.descripcion = 'La descripcion tiene que estar entre 4 y 300 caracteres'
+    
 
     if(!data.fecha_inicio)
         errors.fecha_inicio = 'Definir una fecha de inicio es obligatorio'
@@ -21,5 +28,3 @@ const validationNewIncentivo = (data) =>{
     
     return errors;
 }
-
-export default validationNewIncentivo
