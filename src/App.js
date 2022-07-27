@@ -143,7 +143,7 @@ const App = () => {
         //Va a cambiar el valor del gancho de estado segun el parametro que sera enviado
         setLayoutMode(mode)
         //Establece la cookie para que almacene la opcion de estilado que configure el usuario
-        setCookie('layautModeCookie', mode, { path: '/' })
+        setCookie('layautModeCookie', mode, { path: '/',  sameSite:'lax'})
     }
 
     //Funcion que se encambia el color de fondo en el aplicativo, solicita como parametros el mode
@@ -151,7 +151,7 @@ const App = () => {
         //Cambia el valor del gancho de estado segun el parametro solicitado en la funcion
         setLayoutColorMode(mode)
         //Establece una cookie que almacenara este valor para todas las rutas
-        setCookie('layautColorModeCookie', mode, { path: '/' })
+        setCookie('layautColorModeCookie', mode, { path: '/',  sameSite:'lax'})
     }
 
     //Funcion que detecta cuando se da un clic afuera del menu//en el contenedor del sistema

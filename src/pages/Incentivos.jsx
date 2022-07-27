@@ -25,6 +25,7 @@ import RetornarColorSegunPorcentaje from '../helpers/RetornarColorSegunPorcentaj
 import NuevoIncentivo from '../components/incentivos/NuevoIncentivo';
 import { confirmDialog } from 'primereact/confirmdialog';
 import EditarIncentivo from '../components/incentivos/EditarIncentivo';
+import IncentivosPlaneados from '../components/incentivos/IncentivosPlaneados';
 
 
 const Incentivos = () => {
@@ -79,9 +80,9 @@ const Incentivos = () => {
 
     //Opciones del boton para cambiar la seccion de insentivo que se visualiza en el contenido
     const optionsVerSeccionIncentivo = [
-        {label:'Finalizados', icon:'pi pi-check-circle', value:'3'},
+        {label:'Finalizados', icon:'pi pi-check-circle', value:'2'},
         {label:'En Curso', icon:'pi pi-clock', value:'1'},
-        {label:'Planeados', icon:'pi pi-calendar', value:'2'},
+        {label:'Planeados', icon:'pi pi-calendar', value:'3'},
     ]
 
     //Formato de cada seccion del boton
@@ -174,53 +175,62 @@ const Incentivos = () => {
         </>}
 
         {!loading && <>
-            {/* Seccion de graficas */}
-            <div className='col-12 md:col-6'>
-                Graficas
-            </div>
 
-            {/* Seccion de contenido de consulta */}
-            <ScrollPanel className='col-12 md:col-6' style={{ maxHeight: '80vh' }}>
-                <ul className="list-none p-0 m-0">
+            {verSeccionIncentivo === '1' && <>
 
-                    {
-                        dataIncentivos.map((el,id)=>{
-                            let porcentajes = parseInt(el.total_registros*100)/parseInt(el.meta_incentivo)
-                            return (
-                                <li key={id} className='card pt-2 pl-2 p-0 m-0 mb-4'>
-                                    <div className='grid aling-items-between '>
-                                        <div className='col-5 sm:col-7'>
-                                            <span className="text-900 font-medium mr-2 mb-1 md:mb-0">{el.titulo}</span>
-                                            <div className="mt-1 text-600">{el.total_registros} registros de {el.meta_incentivo}</div>
-                                        </div>
-                                        <div className='col-7 sm:col-5'>
-                                            <div className="mt-1 text-800">
-                                                Desde: <span className='text-purple-600'>{el.fecha_inicio}</span>
+                {/* Seccion de graficas */}
+                <div className='col-12 md:col-6'>
+                    Graficas
+                </div>
+
+                {/* Seccion de contenido de consulta */}
+                <ScrollPanel className='col-12 md:col-6' style={{ maxHeight: '80vh' }}>
+                    <ul className="list-none p-0 m-0">
+
+                        {
+                            dataIncentivos.map((el,id)=>{
+                                let porcentajes = parseInt(el.total_registros*100)/parseInt(el.meta_incentivo)
+                                return (
+                                    <li key={id} className='card pt-2 pl-2 p-0 m-0 mb-4'>
+                                        <div className='grid aling-items-between '>
+                                            <div className='col-5 sm:col-7'>
+                                                <span className="text-900 font-medium mr-2 mb-1 md:mb-0">{el.titulo}</span>
+                                                <div className="mt-1 text-600">{el.total_registros} registros de {el.meta_incentivo}</div>
                                             </div>
-                                            <div className="mt-1 text-800 ">
-                                                Hasta: <span className='text-purple-600'>{el.fecha_corte}</span>
+                                            <div className='col-7 sm:col-5'>
+                                                <div className="mt-1 text-800">
+                                                    Desde: <span className='text-purple-600'>{el.fecha_inicio}</span>
+                                                </div>
+                                                <div className="mt-1 text-800 ">
+                                                    Hasta: <span className='text-purple-600'>{el.fecha_corte}</span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className='grid'>
-                                        <div className="mt-2 md:mt-0 flex align-items-center col-6 sm:col-7 ">
-                                            <div className="surface-300 border-round overflow-hidden w-10" style={{height: '11px'}}>
-                                            <div className={`bg-${RetornarColorSegunPorcentaje(porcentajes)} h-full`} style={{width: `${porcentajes}%`}}/>
+                                        <div className='grid'>
+                                            <div className="mt-2 md:mt-0 flex align-items-center col-6 sm:col-7 ">
+                                                <div className="surface-300 border-round overflow-hidden w-10" style={{height: '11px'}}>
+                                                <div className={`bg-${RetornarColorSegunPorcentaje(porcentajes)} h-full`} style={{width: `${porcentajes}%`}}/>
+                                            </div>
+                                                <span className={`text-${RetornarColorSegunPorcentaje(porcentajes)} ml-3 font-medium`}>%{Math.trunc(porcentajes)}</span>
+                                            </div>
+                                            <div className='col-6 sm:col-5'>
+                                                <Button className='p-button-text p-button-info' onClick={()=>showDetallesIncentivo(el)}  icon='pi pi-eye'/>
+                                                <Button className='p-button-text p-button-danger' onClick={()=>AbrirVentanaConfirmacionBorrarIncentivo(el.id_incentivo_general)} icon='pi pi-trash'/>
+                                            </div>
                                         </div>
-                                            <span className={`text-${RetornarColorSegunPorcentaje(porcentajes)} ml-3 font-medium`}>%{Math.trunc(porcentajes)}</span>
-                                        </div>
-                                        <div className='col-6 sm:col-5'>
-                                            <Button className='p-button-text p-button-info' onClick={()=>showDetallesIncentivo(el)}  icon='pi pi-eye'/>
-                                            <Button className='p-button-text p-button-danger' onClick={()=>AbrirVentanaConfirmacionBorrarIncentivo(el.id_incentivo_general)} icon='pi pi-trash'/>
-                                        </div>
-                                    </div>
-                                </li>
-                            )
-                        })
-                    }
+                                    </li>
+                                )
+                            })
+                        }
 
-                </ul>
-            </ScrollPanel>
+                    </ul>
+                </ScrollPanel>
+            </>}
+
+            {verSeccionIncentivo === '3' && <>
+                <IncentivosPlaneados dataIncentivos={dataIncentivos} AbrirVentanaConfirmacionBorrarIncentivo={AbrirVentanaConfirmacionBorrarIncentivo} toast={toast}/>
+            </>}
+
         </>}
 
         {/* Componente emergente para crear un nuevo incentivo */}

@@ -97,7 +97,7 @@ export const AppConfig = (props) => {
         //Definimos i como una funcion que retorna un valor en menos 1 al parametro que es ingresado
         let i = (prevState) => --prevState
         //Definimos la cookie de escala como el retorno de la funcion i pasando el valor del gancho de escala, y definimos para que rutas este estara disponible... decimos que estara en todas las rutas
-        setCookie('scaleCookie', i(scale), {path: '/'})
+        setCookie('scaleCookie', i(scale), {path: '/', sameSite:'lax'})
         //Cambiamos el valor del gancho como uno menos del valor actual
         setScale((prevState) => --prevState);
     }
@@ -106,7 +106,7 @@ export const AppConfig = (props) => {
         //Definimos i como una funcion que retorna un valor en mas 1 al parametro que es ingresado
         let i = (prevState) => ++prevState
         //Definimos la cookie de escala como el retorno de la funcion i pasando el valor del gancho de escala, y definimos para que rutas este estara disponible... decimos que estara en todas las rutas
-        setCookie('scaleCookie', i(scale), {path: '/'})
+        setCookie('scaleCookie', i(scale), {path: '/',  sameSite:'lax'})
         //Cambiamos el valor del gancho como uno mas del valor actual
         setScale((prevState) => ++prevState);
     }
@@ -178,7 +178,7 @@ export const AppConfig = (props) => {
         //Cambiamos el valor del gancho theme 
         setTheme(theme);
         //Cambiamos el valor de la cookie de thema, con el thema que se pasa en los parametros
-        setCookie('themeCookie', theme, {path:'/'})
+        setCookie('themeCookie', theme, {path:'/',  sameSite:'lax'})
     }
 
     return (
