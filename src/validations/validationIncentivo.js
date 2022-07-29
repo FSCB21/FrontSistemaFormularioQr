@@ -3,8 +3,8 @@ export const validationNewIncentivo = (data) =>{
 
     if(!data.titulo)
         errors.titulo = 'Definir un titulo es obligatorio'
-    else if(!(data.titulo.length>=4 && data.titulo.length<75))
-        errors.titulo = 'El titulo tiene que estar entre 4 y 75 caracteres'
+    else if(!(data.titulo.length>=4 && data.titulo.length<31))
+        errors.titulo = 'El titulo tiene que estar entre 4 y 30 caracteres'
 
     if(data.descripcion)
         if(!(data.descripcion.length>=4 && data.descripcion.length<300))

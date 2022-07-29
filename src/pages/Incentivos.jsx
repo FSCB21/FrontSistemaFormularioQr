@@ -26,7 +26,9 @@ import NuevoIncentivo from '../components/incentivos/NuevoIncentivo';
 import { confirmDialog } from 'primereact/confirmdialog';
 import EditarIncentivo from '../components/incentivos/EditarIncentivo';
 import IncentivosPlaneados from '../components/incentivos/IncentivosPlaneados';
+import GraficasIncentivosEnCurso from '../components/incentivos/GraficasIncentivosEnCurso';
 
+import GenerateRandom from '../helpers/GenerateRandom';
 
 const Incentivos = () => {
 
@@ -113,6 +115,12 @@ const Incentivos = () => {
         };
     }, [verSeccionIncentivo, realoadPage]); 
 
+    useEffect(()=>{
+        setColors()
+        return () => {
+        };
+    }, [])
+
     const incentivoService = new IncentivosService()
 
     const [dataDetallesIncentivo, setDataDetallesIncentivo] = useState({
@@ -150,6 +158,16 @@ const Incentivos = () => {
         });
     };
     
+    const [arregloNumerosColores, setArreloNumerosColores] = useState([])
+
+    const setColors = () => {
+        let i = []
+        for (let index = 0; index <= 100; index++) {
+            i.push(GenerateRandom(0, 100))
+        }
+        setArreloNumerosColores(i)
+    }
+
   return (
     <div className="grid">
 
@@ -180,7 +198,7 @@ const Incentivos = () => {
 
                 {/* Seccion de graficas */}
                 <div className='col-12 md:col-6'>
-                    Graficas
+                    <GraficasIncentivosEnCurso dataIncentivos={dataIncentivos} arregloNumerosColores={arregloNumerosColores}/>
                 </div>
 
                 {/* Seccion de contenido de consulta */}
@@ -211,7 +229,7 @@ const Incentivos = () => {
                                                 <div className="surface-300 border-round overflow-hidden w-10" style={{height: '11px'}}>
                                                 <div className={`bg-${RetornarColorSegunPorcentaje(porcentajes)} h-full`} style={{width: `${porcentajes}%`}}/>
                                             </div>
-                                                <span className={`text-${RetornarColorSegunPorcentaje(porcentajes)} ml-3 font-medium`}>%{Math.trunc(porcentajes)}</span>
+                                                <span className={`text-${RetornarColorSegunPorcentaje(porcentajes)} ml-3 font-medium`}>{Math.trunc(porcentajes)}%</span>
                                             </div>
                                             <div className='col-6 sm:col-5'>
                                                 <Button className='p-button-text p-button-info' onClick={()=>showDetallesIncentivo(el)}  icon='pi pi-eye'/>
